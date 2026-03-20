@@ -1,0 +1,110 @@
+[
+  {
+    "id": "s1",
+    "title": "A Blueprint for Modern Digital Government",
+    "url": "https://www.gov.uk/government/publications/a-blueprint-for-modern-digital-government",
+    "description": "UK Government framework covering shared infrastructure, data, AI, and cross-government platforms for digital public services.",
+    "category": "blueprints",
+    "tags": ["digital transformation", "government platforms", "service design"],
+    "country": "United Kingdom",
+    "datePublished": "2024-12",
+    "sourceOrg": "UK DSIT",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "s2",
+    "title": "GovStack — Building Blocks for Digital Government",
+    "url": "https://www.govstack.global",
+    "description": "Open-source building blocks specification endorsed by ITU, GIZ, and Estonia. Modular, reusable components for digital government services.",
+    "category": "blueprints",
+    "tags": ["building blocks", "open source", "standards", "interoperability"],
+    "country": "Global",
+    "datePublished": "2023-06",
+    "sourceOrg": "GovStack / ITU",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "s3",
+    "title": "What is Digital Public Infrastructure?",
+    "url": "https://medium.com/iipp-blog/what-is-digital-public-infrastructure-6fbfa74f2f8c",
+    "description": "David Eaves and Jordan Sandman (UCL IIPP / Co-Develop) lay out a framework for understanding, designing, and deploying DPI — grounded in four principles: inclusive, foundational, interoperable, and publicly accountable.",
+    "category": "dpi101",
+    "tags": ["DPI framework", "conceptual", "inclusion", "interoperability"],
+    "country": "Global",
+    "datePublished": "2023-04",
+    "sourceOrg": "UCL IIPP / Co-Develop",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "s4",
+    "title": "Digital ID to Enhance Financial Inclusion: A Toolkit for Regulatory Authorities",
+    "url": "https://openknowledge.worldbank.org/entities/publication/077b56f8-2031-5d02-a17f-d40285753747",
+    "description": "World Bank toolkit for regulators on leveraging digital ID to deepen financial inclusion, covering risk-based KYC, tiered CDD regimes, and AML/CFT frameworks. Developed under the FIGI programme.",
+    "category": "digitalid",
+    "tags": ["financial inclusion", "KYC", "AML/CFT", "regulatory toolkit", "FIGI"],
+    "country": "Global",
+    "datePublished": "2022-05",
+    "sourceOrg": "World Bank ID4D",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "s5",
+    "title": "Guidelines for ID4D Diagnostics",
+    "url": "https://id4d.worldbank.org/Diagnostic-Guidelines",
+    "description": "Methodology for country-level diagnostics of existing and planned ID systems, covering institutions, technology, law, policy, and practice. Guided by the ten Principles on Identification for Sustainable Development.",
+    "category": "digitalid",
+    "tags": ["diagnostics", "ID ecosystem", "country assessment", "ID principles"],
+    "country": "Global",
+    "datePublished": "2019-01",
+    "sourceOrg": "World Bank ID4D",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "s6",
+    "title": "MOSIP — Modular Open Source Identity Platform",
+    "url": "https://mosip.io",
+    "description": "Open-source digital ID platform deployed across 10+ countries. Modular, configurable, privacy-by-design. A leading DPG for foundational identity.",
+    "category": "digitalid",
+    "tags": ["DPG", "open source", "biometrics", "foundational ID"],
+    "country": "Global",
+    "datePublished": "2023-01",
+    "sourceOrg": "MOSIP",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "s7",
+    "title": "Data Empowerment and Protection Architecture (DEPA)",
+    "url": "https://depa.world",
+    "description": "India's consent-based data sharing framework. Introduces Account Aggregators and a user-centric data portability model across financial, health, and other sectors.",
+    "category": "datasharing",
+    "tags": ["consent", "data portability", "account aggregator", "India Stack"],
+    "country": "India",
+    "datePublished": "2021-08",
+    "sourceOrg": "iSPIRT / India MeitY",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "s8",
+    "title": "Digital Health DPI Framework",
+    "url": "https://digitalhealthdpi.org",
+    "description": "Applies the DPI lens to national health systems — unified health IDs, health data exchanges, and facility and provider registries.",
+    "category": "sectoral",
+    "tags": ["health", "UHI", "FHIR", "health registries"],
+    "country": "Global",
+    "datePublished": "2023-09",
+    "sourceOrg": "Lancet & FT Commission",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "s9",
+    "title": "The Empirical Case for DPI: Evidence from LMICs",
+    "url": "https://www.co-develop.net/resource/empirical-case-dpi",
+    "description": "Synthesises evidence across 30+ countries on DPI's measurable impact on financial inclusion, service delivery, and economic growth.",
+    "category": "dpiresearch",
+    "tags": ["evidence", "impact", "LMICs", "financial inclusion"],
+    "country": "Global",
+    "datePublished": "2023-11",
+    "sourceOrg": "Co-Develop",
+    "dateAdded": "2025-03-20"
+  }
+]
