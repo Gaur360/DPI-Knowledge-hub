@@ -578,7 +578,7 @@
         setMessages(newMsgs); setThinking(true);
         try {
           const context = resources.map(r=>`[${r.title}] (${r.category}) — ${r.description||""} — ${r.url}`).join("\n");
-          const system = `You are a helpful assistant for the DPI Knowledge Hub, a curated resource library on Digital Public Infrastructure maintained by ADB's Digital Sector Office. Answer questions using the resources below as your primary reference. Be concise and cite resource titles when relevant.\n\nRESOURCES:\n${context}`;
+          const system = `You are a helpful assistant for the DPI Knowledge Hub, a curated resource library on Digital Public Infrastructure. Answer questions using the resources below as your primary reference. Be concise and cite resource titles when relevant.\n\nRESOURCES:\n${context}`;
           const reply = await callClaude(apiKey, newMsgs, system);
           setMessages([...newMsgs, {role:"assistant",content:reply}]);
         } catch(e) { setMessages([...newMsgs, {role:"assistant",content:`Error: ${e.message}`}]); }
@@ -844,7 +844,7 @@
                 <div className="hub-intro">
                   <div className="hub-intro-title">A curated library on Digital Public Infrastructure</div>
                   <p className="hub-intro-desc">
-                    Built for ADB's Digital Sector Office — this is a living reference for practitioners working on DPI across Asia-Pacific. Browse frameworks, foundational readings, research, and sector-specific resources, or search for a specific topic, country, or organisation.
+                A living reference for practitioners working on Digital Public Infrastructure. Browse frameworks, foundational readings, research, and sector-specific resources, or search by topic, country, or organisation.
                   </p>
                   <div className="hub-intro-meta">
                     <div className="hub-stat">
