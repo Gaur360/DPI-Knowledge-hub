@@ -118,23 +118,6 @@
     "dateAdded": "2025-03-20"
   },
   {
-    "id": "s8",
-    "title": "Digital Health DPI Framework",
-    "url": "https://digitalhealthdpi.org",
-    "description": "Applies the DPI lens to national health systems — unified health IDs, health data exchanges, and facility and provider registries.",
-    "category": "sectoral",
-    "tags": [
-      "health",
-      "UHI",
-      "FHIR",
-      "health registries"
-    ],
-    "country": "Global",
-    "datePublished": "2023-09",
-    "sourceOrg": "Lancet & FT Commission",
-    "dateAdded": "2025-03-20"
-  },
-  {
     "id": "e1",
     "title": "What is Digital Public Infrastructure?",
     "url": "https://medium.com/iipp-blog/what-is-digital-public-infrastructure-6fbfa74f2f8c",
