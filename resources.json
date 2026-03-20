@@ -1,21 +1,5 @@
 [
   {
-    "title": "G20 Digital Economy Working Group Ministers Declaration - DPI",
-    "url": "https://g7g20-documents.org/database/document/2023-g20-india-sherpa-track-digital-economy-ministers-ministers-language-g20-digital-economy-ministers-meeting-outcome-document-and-chair-summary",
-    "description": "First multilateral declaration with the endorsement of DPI as a catalyst for digital development.",
-    "category": "dpi101",
-    "tags": [
-      "India",
-      "DPI",
-      "G20"
-    ],
-    "country": "Global",
-    "datePublished": "2023",
-    "sourceOrg": "G20",
-    "id": "mmylvezb",
-    "dateAdded": "2026-03-20"
-  },
-  {
     "title": "The DigiLocker Story: How India is digitising its documents",
     "url": "https://www.ucl.ac.uk/bartlett/publications/2025/oct/digilocker-story-how-india-digitising-its-documents",
     "description": "A case study by Ritul Gaur and Davis Eaves on DigiLocker, India's digital wallet and data sharing app. The case study highlights the tradeoffs that Government of India had to make in building DigiLocker. ",
@@ -134,6 +118,23 @@
     "dateAdded": "2025-03-20"
   },
   {
+    "id": "s8",
+    "title": "Digital Health DPI Framework",
+    "url": "https://digitalhealthdpi.org",
+    "description": "Applies the DPI lens to national health systems — unified health IDs, health data exchanges, and facility and provider registries.",
+    "category": "sectoral",
+    "tags": [
+      "health",
+      "UHI",
+      "FHIR",
+      "health registries"
+    ],
+    "country": "Global",
+    "datePublished": "2023-09",
+    "sourceOrg": "Lancet & FT Commission",
+    "dateAdded": "2025-03-20"
+  },
+  {
     "id": "e1",
     "title": "What is Digital Public Infrastructure?",
     "url": "https://medium.com/iipp-blog/what-is-digital-public-infrastructure-6fbfa74f2f8c",
@@ -245,24 +246,6 @@
     ],
     "country": "Global",
     "datePublished": "2023-09",
-    "sourceOrg": "G20",
-    "dateAdded": "2025-03-20"
-  },
-  {
-    "id": "e8",
-    "title": "G20 Digital Economy Ministers Meeting Outcome Document",
-    "url": "https://www.g20.org/content/dam/gtwenty/gtwenty_new/document/G20_Digital_Economy_Outcome_Document%20_and_Chair%27s_Summary_19082023.pdf",
-    "description": "Outcome document from the G20 Digital Economy Ministerial — covers DPI, AI governance, cybersecurity, and digital public goods as priorities for the global digital economy.",
-    "category": "blueprints",
-    "tags": [
-      "G20",
-      "digital economy",
-      "ministerial",
-      "DPI",
-      "AI governance"
-    ],
-    "country": "Global",
-    "datePublished": "2023-08",
     "sourceOrg": "G20",
     "dateAdded": "2025-03-20"
   },
