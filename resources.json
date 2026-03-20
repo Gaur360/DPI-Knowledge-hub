@@ -100,23 +100,6 @@
     "dateAdded": "2025-03-20"
   },
   {
-    "id": "s7",
-    "title": "Data Empowerment and Protection Architecture (DEPA)",
-    "url": "https://depa.world",
-    "description": "India's consent-based data sharing framework. Introduces Account Aggregators and a user-centric data portability model across financial, health, and other sectors.",
-    "category": "datasharing",
-    "tags": [
-      "consent",
-      "data portability",
-      "account aggregator",
-      "India Stack"
-    ],
-    "country": "India",
-    "datePublished": "2021-08",
-    "sourceOrg": "iSPIRT / India MeitY",
-    "dateAdded": "2025-03-20"
-  },
-  {
     "id": "s8",
     "title": "Digital Health DPI Framework",
     "url": "https://digitalhealthdpi.org",
