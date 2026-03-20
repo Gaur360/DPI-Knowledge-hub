@@ -825,11 +825,7 @@
                   <span className="cat-count">{counts[cat.id]}</span>
                 </button>
               ))}
-              <div className="sidebar-divider" />
-              <div className="sidebar-actions">
-                <button className="sidebar-action-btn" onClick={()=>setShowContactModal(true)}><Icon.Mail /> Write to us</button>
-                <button className="sidebar-action-btn" onClick={()=>NEWSLETTER_URL!=="YOUR_NEWSLETTER_URL"?window.open(NEWSLETTER_URL,"_blank"):alert("Set NEWSLETTER_URL in index.html")}><Icon.Bell /> Subscribe to digest</button>
-                <button className="sidebar-action-btn" onClick={()=>setShowApiModal(true)} style={{color:apiKey?"var(--navy)":"var(--text-2)"}}><Icon.Sparkle /> {apiKey?"AI enabled":"Enable AI"}</button>
+               
               </div>
               <div className="sidebar-footer">
                 <div className="sidebar-stat">{resources.length}</div>
