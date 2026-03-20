@@ -1,573 +1,615 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DIG Knowledge Hub — ADB</title>
-
-  <!-- ============================================================
-    CONFIGURATION — update these two lines with your details
-  ============================================================ -->
-  <script>
-    const GITHUB_OWNER = "Gaur360";  // e.g. "ritzgaur"
-    const GITHUB_REPO  = "DPI-Knowledge-hub";      // your repo name
-  </script>
-  <!-- ============================================================ -->
-
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, sans-serif;
-      background: #fafaf8; color: #111; font-size: 14px; line-height: 1.5;
-    }
-    input, select, textarea, button {
-      font-family: inherit; font-size: 13px;
-      border: 1px solid #ddd; border-radius: 7px;
-      padding: 6px 10px; background: #fff; color: #111; outline: none;
-    }
-    input:focus, select:focus, textarea:focus { border-color: #999; }
-    button { cursor: pointer; background: #fff; }
-    a { color: inherit; text-decoration: none; }
-    textarea { resize: vertical; }
-
-    .header {
-      background: #fff; border-bottom: 1px solid #eee;
-      padding: 10px 20px; display: flex; align-items: center;
-      gap: 10px; flex-wrap: wrap; position: sticky; top: 0; z-index: 10;
-    }
-    .logo-name { font-size: 14px; font-weight: 600; color: #111; }
-    .logo-sub  { font-size: 10px; color: #aaa; margin-top: 1px; }
-    .spacer    { flex: 1; }
-
-    .btn-primary {
-      background: #111; color: #fff; border: none;
-      border-radius: 7px; padding: 6px 14px; font-size: 12px;
-      display: flex; align-items: center; gap: 5px;
-    }
-    .btn-primary:hover { background: #333; }
-    .btn-ghost {
-      background: transparent; border: 1px solid #e0e0e0;
-      border-radius: 7px; padding: 5px 11px; font-size: 12px;
-      display: flex; align-items: center; gap: 5px; color: #555;
-    }
-    .btn-ghost:hover { background: #f5f5f3; }
-    .btn-icon {
-      background: transparent; border: none; padding: 5px;
-      display: flex; align-items: center; color: #aaa;
-    }
-    .btn-icon:hover { color: #555; }
-
-    .layout { display: flex; min-height: calc(100vh - 53px); }
-
-    .sidebar {
-      width: 200px; background: #fff; border-right: 1px solid #eee;
-      padding: 12px 0; display: flex; flex-direction: column;
-      flex-shrink: 0;
-    }
-    .sidebar-label {
-      font-size: 9px; font-weight: 600; letter-spacing: 0.8px;
-      color: #bbb; padding: 0 16px 8px; text-transform: uppercase;
-    }
-    .cat-btn {
-      width: 100%; text-align: left; background: none; border: none;
-      border-left: 2px solid transparent; padding: 7px 16px;
-      font-size: 12px; color: #666; cursor: pointer;
-      display: flex; justify-content: space-between; align-items: center;
-      font-family: inherit;
-    }
-    .cat-btn:hover { background: #f5f5f3; color: #111; }
-    .cat-btn.active {
-      border-left-color: #111; background: #f5f5f3;
-      color: #111; font-weight: 500;
-    }
-    .cat-count {
-      font-size: 10px; background: #f0f0ed; color: #aaa;
-      padding: 1px 6px; border-radius: 8px; min-width: 18px; text-align: center;
-    }
-    .sidebar-footer {
-      margin-top: auto; padding: 14px 16px;
-      border-top: 1px solid #eee;
-    }
-    .sidebar-total { font-size: 24px; font-weight: 600; color: #111; line-height: 1; }
-    .sidebar-total-label { font-size: 11px; color: #aaa; margin-top: 3px; }
-    .editor-badge {
-      font-size: 10px; color: #1a6aba; margin-top: 7px;
-      display: flex; align-items: center; gap: 4px;
-    }
-
-    .main { flex: 1; padding: 16px 22px; min-width: 0; }
-
-    .filter-bar {
-      background: #f5f5f3; border-radius: 8px;
-      padding: 8px 12px; margin-bottom: 14px;
-      display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
-    }
-    .filter-bar label { font-size: 11px; color: #aaa; }
-    .filter-bar select { font-size: 11px; padding: 3px 8px; }
-    .clear-btn {
-      font-size: 11px; color: #c0392b; background: none;
-      border: none; cursor: pointer; font-family: inherit;
-    }
-
-    .cat-header { margin-bottom: 14px; }
-    .cat-header h2 { font-size: 16px; font-weight: 500; color: #111; }
-    .cat-header p  { font-size: 12px; color: #888; margin-top: 3px; }
-
-    .results-count { font-size: 11px; color: #bbb; margin-bottom: 12px; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 10px;
-    }
-
-    .card {
-      background: #fff; border: 1px solid #eee; border-radius: 12px;
-      padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;
-    }
-    .card:hover { border-color: #ddd; }
-    .card-top { display: flex; justify-content: space-between; align-items: center; }
-    .cat-badge {
-      font-size: 9px; font-weight: 600; letter-spacing: 0.4px;
-      padding: 2px 8px; border-radius: 4px;
-    }
-    .delete-btn {
-      background: none; border: none; cursor: pointer;
-      color: #ccc; padding: 2px; display: flex;
-    }
-    .delete-btn:hover { color: #c0392b; }
-    .card-title {
-      font-size: 13px; font-weight: 500; color: #111; line-height: 1.4;
-      display: flex; gap: 5px; align-items: flex-start;
-    }
-    .card-title:hover { color: #1a6aba; }
-    .card-title span { flex: 1; }
-    .card-desc { font-size: 12px; color: #666; line-height: 1.6; }
-    .tags { display: flex; flex-wrap: wrap; gap: 4px; }
-    .tag {
-      font-size: 10px; background: #f5f5f3; color: #888;
-      padding: 2px 7px; border-radius: 4px;
-    }
-    .card-meta {
-      display: flex; gap: 6px; flex-wrap: wrap;
-      border-top: 1px solid #f0f0ed; padding-top: 8px;
-      font-size: 10px; color: #bbb;
-    }
-
-    .empty {
-      padding: 60px 0; text-align: center; color: #bbb; font-size: 13px;
-    }
-    .empty-icon { font-size: 32px; opacity: 0.3; margin-bottom: 10px; }
-
-    /* Error banner */
-    .error-banner {
-      background: #fdf0f0; border-bottom: 1px solid #f5c6c6;
-      padding: 7px 20px; font-size: 12px; color: #c0392b;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .error-dismiss { margin-left: auto; background: none; border: none; cursor: pointer; color: #c0392b; font-family: inherit; font-size: 12px; }
-
-    /* Token modal */
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.35);
-      display: flex; align-items: center; justify-content: center; z-index: 100;
-    }
-    .modal {
-      background: #fff; border-radius: 12px; border: 1px solid #e0e0e0;
-      padding: 22px; width: 360px; position: relative;
-    }
-    .modal h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #111; }
-    .modal p  { font-size: 12px; color: #666; line-height: 1.6; margin-bottom: 12px; }
-    .modal input { width: 100%; margin-bottom: 12px; font-family: monospace; font-size: 12px; }
-    .modal-close {
-      position: absolute; top: 12px; right: 12px;
-      background: none; border: none; cursor: pointer; color: #aaa; font-size: 18px; line-height: 1;
-    }
-    .modal-hint { font-size: 10px; color: #bbb; margin-top: 10px; line-height: 1.6; }
-    .modal-hint code { background: #f5f5f3; padding: 1px 4px; border-radius: 3px; font-size: 10px; }
-
-    /* Add form */
-    .add-view { max-width: 560px; margin: 0 auto; padding: 20px; }
-    .add-view h2 { font-size: 17px; font-weight: 600; margin-bottom: 4px; color: #111; }
-    .add-view .subtitle { font-size: 12px; color: #888; margin-bottom: 20px; }
-    .back-btn { font-size: 12px; color: #888; background: none; border: none; cursor: pointer; margin-bottom: 18px; font-family: inherit; }
-    .back-btn:hover { color: #111; }
-    .field { margin-bottom: 13px; }
-    .field label { display: block; font-size: 11px; color: #888; margin-bottom: 4px; }
-    .field input, .field select, .field textarea { width: 100%; }
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 13px; }
-    .form-error { font-size: 12px; color: #c0392b; background: #fdf0f0; padding: 7px 10px; border-radius: 7px; margin-bottom: 12px; }
-    .form-actions { display: flex; gap: 8px; }
-
-    /* Spinning refresh icon */
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .spinning { animation: spin 1s linear infinite; }
-
-    /* Search wrapper */
-    .search-wrap { position: relative; display: flex; align-items: center; }
-    .search-wrap svg { position: absolute; left: 9px; color: #bbb; pointer-events: none; }
-    .search-wrap input { padding-left: 28px; width: 200px; }
-  </style>
-</head>
-<body>
-  <div id="root"></div>
-
-  <script type="text/babel">
-    const { useState, useEffect, useCallback } = React;
-
-    // ── GitHub API helpers ──────────────────────────────────────
-    const BRANCH   = "main";
-    const DATA_FILE = "resources.json";
-    const rawUrl  = () => `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${BRANCH}/${DATA_FILE}?t=${Date.now()}`;
-    const apiUrl  = () => `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${DATA_FILE}`;
-
-    async function loadResources() {
-      const res = await fetch(rawUrl());
-      if (!res.ok) throw new Error("Could not load resources from GitHub.");
-      return res.json();
-    }
-
-    async function getFileSha(token) {
-      const res = await fetch(apiUrl(), { headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" } });
-      if (!res.ok) throw new Error("Could not reach GitHub. Check your token.");
-      return (await res.json()).sha;
-    }
-
-    async function commitFile(token, data, sha) {
-      const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-      const res = await fetch(apiUrl(), {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json", "Content-Type": "application/json" },
-        body: JSON.stringify({ message: `Update resources — ${new Date().toISOString().slice(0,10)}`, content, sha, branch: BRANCH }),
-      });
-      if (!res.ok) { const e = await res.json().catch(()=>{}); throw new Error(e?.message || "GitHub commit failed."); }
-    }
-
-    // ── Category config ─────────────────────────────────────────
-    const CATS = [
-      { id: "all",         label: "All Resources" },
-      { id: "blueprints",  label: "Blueprint / Strategy" },
-      { id: "dpi101",      label: "DPI 101" },
-      { id: "dpiresearch", label: "DPI Research" },
-      { id: "sectoral",    label: "Sectoral DPI" },
-      { id: "digitalid",   label: "Digital Identity" },
-      { id: "datasharing", label: "Data Sharing" },
-    ];
-    const CAT_COLORS = {
-      blueprints:  { bg: "#E6F1FB", fg: "#0C447C" },
-      dpi101:      { bg: "#EAF3DE", fg: "#27500A" },
-      dpiresearch: { bg: "#FAEEDA", fg: "#633806" },
-      sectoral:    { bg: "#E1F5EE", fg: "#085041" },
-      digitalid:   { bg: "#EEEDFE", fg: "#3C3489" },
-      datasharing: { bg: "#FAECE7", fg: "#712B13" },
-    };
-    const CAT_SHORT = { blueprints:"Blueprint", dpi101:"DPI 101", dpiresearch:"Research", sectoral:"Sectoral", digitalid:"Digital ID", datasharing:"Data Sharing" };
-    const CAT_DESC  = {
-      blueprints:  "National and multilateral strategies and frameworks for digital government transformation.",
-      dpi101:      "Foundational papers, primers, and conceptual frameworks on DPI.",
-      dpiresearch: "Academic and policy research on DPI outcomes, adoption, and impact.",
-      sectoral:    "DPI applications in health, education, agriculture, GIS, and other sectors.",
-      digitalid:   "Digital identity systems, vendors, DPGs, and technical standards.",
-      datasharing: "Data exchange frameworks, consent architectures, and data portability tools.",
-    };
-
-    // ── SVG icons (inline, no library needed) ───────────────────
-    const Icon = {
-      Search:  () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>,
-      Plus:    () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14M5 12h14"/></svg>,
-      Link:    () => <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>,
-      Trash:   () => <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>,
-      Filter:  () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>,
-      Refresh: () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>,
-      Lock:    () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>,
-      Unlock:  () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>,
-      Key:     () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>,
-      X:       () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
-    };
-
-    // ── Token modal ──────────────────────────────────────────────
-    function TokenModal({ current, onSave, onClose }) {
-      const [val, setVal] = useState(current);
-      return (
-        <div className="modal-overlay" onClick={onClose}>
-          <div className="modal" onClick={e => e.stopPropagation()}>
-            <button className="modal-close" onClick={onClose}><Icon.X /></button>
-            <h3 style={{display:"flex",alignItems:"center",gap:7}}><Icon.Key /> Editor access</h3>
-            <p>
-              Enter a GitHub Personal Access Token with <strong>Contents: Read &amp; Write</strong> permission on the <code style={{fontSize:11,background:"#f5f5f3",padding:"1px 5px",borderRadius:4}}>{GITHUB_REPO}</code> repo.
-              Stored only in your browser — never sent anywhere except GitHub.
-            </p>
-            <input type="password" placeholder="github_pat_..." value={val} onChange={e => setVal(e.target.value)} onKeyDown={e => e.key==="Enter" && onSave(val.trim())} />
-            <div style={{display:"flex",gap:8}}>
-              <button className="btn-primary" onClick={() => onSave(val.trim())}>Save token</button>
-              {current && <button onClick={() => onSave("")} style={{fontSize:12,color:"#c0392b",background:"none",border:"none",cursor:"pointer",fontFamily:"inherit"}}>Remove</button>}
-            </div>
-            <p className="modal-hint">
-              Get one at: GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens.<br/>
-              Permission needed: <code>Contents</code> → Read and Write, on this repo only.
-            </p>
-          </div>
-        </div>
-      );
-    }
-
-    // ── Resource card ────────────────────────────────────────────
-    function Card({ r, isEditor, onDelete }) {
-      const col = CAT_COLORS[r.category] || { bg:"#f0f0ed", fg:"#555" };
-      return (
-        <div className="card">
-          <div className="card-top">
-            <span className="cat-badge" style={{background:col.bg,color:col.fg}}>{(CAT_SHORT[r.category]||r.category).toUpperCase()}</span>
-            {isEditor && <button className="delete-btn" onClick={onDelete} title="Remove"><Icon.Trash /></button>}
-          </div>
-          <a href={r.url} target="_blank" rel="noopener noreferrer" className="card-title">
-            <span>{r.title}</span><Icon.Link />
-          </a>
-          {r.description && <p className="card-desc">{r.description}</p>}
-          {r.tags?.length > 0 && <div className="tags">{r.tags.map(t => <span key={t} className="tag">{t}</span>)}</div>}
-          <div className="card-meta">
-            {r.sourceOrg && <span>{r.sourceOrg}</span>}
-            {r.country   && <span>· {r.country}</span>}
-            {r.datePublished && <span>· {r.datePublished}</span>}
-          </div>
-        </div>
-      );
-    }
-
-    // ── Add resource form ────────────────────────────────────────
-    function AddView({ onBack, onAdd, saving }) {
-      const empty = { title:"", url:"", description:"", category:"blueprints", tags:"", country:"", datePublished:"", sourceOrg:"" };
-      const [form, setForm] = useState(empty);
-      const [err, setErr]   = useState("");
-      const set = (k,v) => { setForm(f=>({...f,[k]:v})); setErr(""); };
-      const submit = () => {
-        if (!form.title.trim()) { setErr("Title is required."); return; }
-        if (!form.url.trim() || !form.url.startsWith("http")) { setErr("A valid URL starting with http is required."); return; }
-        onAdd({ ...form, tags: form.tags.split(",").map(t=>t.trim()).filter(Boolean) });
-      };
-      const L = ({children}) => <label style={{display:"block",fontSize:11,color:"#888",marginBottom:4}}>{children}</label>;
-      return (
-        <div className="add-view">
-          <button className="back-btn" onClick={onBack}>← Back to repository</button>
-          <h2>Add a resource</h2>
-          <p className="subtitle">Saves directly to the shared GitHub repository.</p>
-          <div className="field"><L>Title *</L><input value={form.title} onChange={e=>set("title",e.target.value)} placeholder="e.g. India Stack: A Digital Infrastructure Story" /></div>
-          <div className="field"><L>URL *</L><input value={form.url} onChange={e=>set("url",e.target.value)} placeholder="https://..." /></div>
-          <div className="field"><L>Description</L><textarea rows={3} value={form.description} onChange={e=>set("description",e.target.value)} placeholder="Brief summary of the resource..." /></div>
-          <div className="two-col">
-            <div><L>Category *</L><select value={form.category} onChange={e=>set("category",e.target.value)}>
-              <option value="blueprints">Blueprint / Strategy</option>
-              <option value="dpi101">DPI 101</option>
-              <option value="dpiresearch">DPI Research</option>
-              <option value="sectoral">Sectoral DPI</option>
-              <option value="digitalid">Digital Identity</option>
-              <option value="datasharing">Data Sharing</option>
-            </select></div>
-            <div><L>Country / Region</L><input value={form.country} onChange={e=>set("country",e.target.value)} placeholder="e.g. India, Global" /></div>
-          </div>
-          <div className="two-col">
-            <div><L>Source organization</L><input value={form.sourceOrg} onChange={e=>set("sourceOrg",e.target.value)} placeholder="e.g. World Bank ID4D" /></div>
-            <div><L>Date published</L><input value={form.datePublished} onChange={e=>set("datePublished",e.target.value)} placeholder="e.g. 2024-03" /></div>
-          </div>
-          <div className="field"><L>Tags (comma-separated)</L><input value={form.tags} onChange={e=>set("tags",e.target.value)} placeholder="e.g. digital ID, biometrics, open source" /></div>
-          {err && <div className="form-error">{err}</div>}
-          <div className="form-actions">
-            <button className="btn-primary" onClick={submit} disabled={saving} style={{opacity:saving?0.6:1}}>
-              {saving ? "Saving..." : "Save resource"}
-            </button>
-            <button className="btn-ghost" onClick={onBack}>Cancel</button>
-          </div>
-        </div>
-      );
-    }
-
-    // ── Main app ─────────────────────────────────────────────────
-    function App() {
-      const [resources, setResources] = useState([]);
-      const [loading, setLoading]     = useState(true);
-      const [syncing, setSyncing]     = useState(false);
-      const [error, setError]         = useState("");
-      const [view, setView]           = useState("browse");
-      const [activeCat, setActiveCat] = useState("all");
-      const [search, setSearch]       = useState("");
-      const [showFilters, setShowFilters] = useState(false);
-      const [fCountry, setFCountry]   = useState("");
-      const [fSource, setFSource]     = useState("");
-      const [fTag, setFTag]           = useState("");
-      const [token, setToken]         = useState(() => localStorage.getItem("dig_pat") || "");
-      const [showTokenModal, setShowTokenModal] = useState(false);
-      const isEditor = Boolean(token);
-
-      const load = useCallback(async () => {
-        setLoading(true); setError("");
-        try { setResources(await loadResources()); }
-        catch(e) { setError(e.message); }
-        setLoading(false);
-      }, []);
-
-      useEffect(() => { load(); }, [load]);
-
-      function saveToken(t) {
-        setToken(t);
-        t ? localStorage.setItem("dig_pat", t) : localStorage.removeItem("dig_pat");
-        setShowTokenModal(false);
-      }
-
-      async function handleAdd(resource) {
-        setSyncing(true); setError("");
-        try {
-          const sha = await getFileSha(token);
-          const updated = [{ ...resource, id: Date.now().toString(36), dateAdded: new Date().toISOString().slice(0,10) }, ...resources];
-          await commitFile(token, updated, sha);
-          setResources(updated);
-        } catch(e) { setError(e.message); }
-        setSyncing(false); setView("browse");
-      }
-
-      async function handleDelete(id) {
-        if (!confirm("Remove this resource?")) return;
-        setSyncing(true); setError("");
-        try {
-          const sha = await getFileSha(token);
-          const updated = resources.filter(r => r.id !== id);
-          await commitFile(token, updated, sha);
-          setResources(updated);
-        } catch(e) { setError(e.message); }
-        setSyncing(false);
-      }
-
-      const filtered = resources.filter(r => {
-        if (activeCat !== "all" && r.category !== activeCat) return false;
-        if (search) {
-          const q = search.toLowerCase();
-          if (![r.title, r.description, ...(r.tags||[]), r.sourceOrg, r.country].join(" ").toLowerCase().includes(q)) return false;
-        }
-        if (fCountry && r.country !== fCountry) return false;
-        if (fSource  && r.sourceOrg !== fSource) return false;
-        if (fTag     && !(r.tags||[]).includes(fTag)) return false;
-        return true;
-      });
-
-      const counts      = Object.fromEntries(CATS.map(c => [c.id, c.id==="all" ? resources.length : resources.filter(r=>r.category===c.id).length]));
-      const allCountries = [...new Set(resources.map(r=>r.country).filter(Boolean))].sort();
-      const allSources   = [...new Set(resources.map(r=>r.sourceOrg).filter(Boolean))].sort();
-      const allTags      = [...new Set(resources.flatMap(r=>r.tags||[]))].sort();
-      const activeFilters = [fCountry, fSource, fTag].filter(Boolean).length;
-
-      if (view === "add") return <AddView onBack={()=>setView("browse")} onAdd={handleAdd} saving={syncing} />;
-
-      return (
-        <>
-          <header className="header">
-            <div>
-              <div className="logo-name">DPI Knowledge Hub</div>
-            <div class="logo-sub"></div>
-            </div>
-            <div className="spacer" />
-            <div className="search-wrap">
-              <Icon.Search />
-              <input placeholder="Search resources..." value={search} onChange={e=>setSearch(e.target.value)} />
-            </div>
-            <button className="btn-ghost" onClick={()=>setShowFilters(v=>!v)} style={{position:"relative",background:showFilters?"#f0f0ed":"#fff"}}>
-              <Icon.Filter /> Filters
-              {activeFilters > 0 && <span style={{position:"absolute",top:2,right:2,width:6,height:6,borderRadius:"50%",background:"#185FA5"}}/>}
-            </button>
-            <button className="btn-icon" onClick={load} title="Refresh">
-              <span className={loading||syncing?"spinning":""}><Icon.Refresh /></span>
-            </button>
-            <button className="btn-icon" onClick={()=>setShowTokenModal(true)} title={isEditor?"Editor mode on — click to manage token":"Unlock editor access"} style={{color:isEditor?"#185FA5":"#bbb"}}>
-              {isEditor ? <Icon.Unlock /> : <Icon.Lock />}
-            </button>
-            {isEditor && (
-              <button className="btn-primary" onClick={()=>setView("add")}>
-                <Icon.Plus /> Add resource
-              </button>
-            )}
-          </header>
-
-          {error && (
-            <div className="error-banner">
-              ⚠ {error}
-              <button className="error-dismiss" onClick={()=>setError("")}>Dismiss</button>
-            </div>
-          )}
-
-          <div className="layout">
-            <aside className="sidebar">
-              <div className="sidebar-label">Categories</div>
-              {CATS.map(cat => (
-                <button key={cat.id} className={`cat-btn${activeCat===cat.id?" active":""}`} onClick={()=>setActiveCat(cat.id)}>
-                  <span>{cat.label}</span>
-                  <span className="cat-count">{counts[cat.id]}</span>
-                </button>
-              ))}
-              <div className="sidebar-footer">
-                <div className="sidebar-total">{resources.length}</div>
-                <div className="sidebar-total-label">resources indexed</div>
-                {isEditor && <div className="editor-badge"><Icon.Unlock /> editor mode</div>}
-              </div>
-            </aside>
-
-            <main className="main">
-              {showFilters && (
-                <div className="filter-bar">
-                  <label>Filter by</label>
-                  <select value={fCountry} onChange={e=>setFCountry(e.target.value)}>
-                    <option value="">All countries</option>
-                    {allCountries.map(c=><option key={c} value={c}>{c}</option>)}
-                  </select>
-                  <select value={fSource} onChange={e=>setFSource(e.target.value)}>
-                    <option value="">All sources</option>
-                    {allSources.map(s=><option key={s} value={s}>{s}</option>)}
-                  </select>
-                  <select value={fTag} onChange={e=>setFTag(e.target.value)}>
-                    <option value="">All tags</option>
-                    {allTags.map(t=><option key={t} value={t}>{t}</option>)}
-                  </select>
-                  {activeFilters > 0 && <button className="clear-btn" onClick={()=>{setFCountry("");setFSource("");setFTag("");}}>Clear filters</button>}
-                </div>
-              )}
-
-              {activeCat !== "all" && (
-                <div className="cat-header">
-                  <h2>{CATS.find(c=>c.id===activeCat)?.label}</h2>
-                  <p>{CAT_DESC[activeCat]}</p>
-                </div>
-              )}
-
-              {loading ? (
-                <div className="empty"><div className="empty-icon">⟳</div>Loading resources...</div>
-              ) : (
-                <>
-                  <div className="results-count">
-                    {filtered.length} resource{filtered.length!==1?"s":""}
-                    {search && ` · matching "${search}"`}
-                  </div>
-                  {filtered.length === 0 ? (
-                    <div className="empty">
-                      <div className="empty-icon">○</div>
-                      No resources found. Try a different search or filter.
-                    </div>
-                  ) : (
-                    <div className="grid">
-                      {filtered.map(r => <Card key={r.id} r={r} isEditor={isEditor} onDelete={()=>handleDelete(r.id)} />)}
-                    </div>
-                  )}
-                </>
-              )}
-            </main>
-          </div>
-
-          {showTokenModal && <TokenModal current={token} onSave={saveToken} onClose={()=>setShowTokenModal(false)} />}
-        </>
-      );
-    }
-
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-  </script>
-</body>
-</html>
+[
+  {
+    "id": "s1",
+    "title": "A Blueprint for Modern Digital Government",
+    "url": "https://www.gov.uk/government/publications/a-blueprint-for-modern-digital-government",
+    "description": "UK Government framework covering shared infrastructure, data, AI, and cross-government platforms for digital public services.",
+    "category": "blueprints",
+    "tags": [
+      "digital transformation",
+      "government platforms",
+      "service design"
+    ],
+    "country": "United Kingdom",
+    "datePublished": "2024-12",
+    "sourceOrg": "UK DSIT",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "s2",
+    "title": "GovStack — Building Blocks for Digital Government",
+    "url": "https://www.govstack.global",
+    "description": "Open-source building blocks specification endorsed by ITU, GIZ, and Estonia. Modular, reusable components for digital government services.",
+    "category": "blueprints",
+    "tags": [
+      "building blocks",
+      "open source",
+      "standards",
+      "interoperability"
+    ],
+    "country": "Global",
+    "datePublished": "2023-06",
+    "sourceOrg": "GovStack / ITU",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "s4",
+    "title": "Digital ID to Enhance Financial Inclusion: A Toolkit for Regulatory Authorities",
+    "url": "https://openknowledge.worldbank.org/entities/publication/077b56f8-2031-5d02-a17f-d40285753747",
+    "description": "World Bank toolkit for regulators on leveraging digital ID to deepen financial inclusion, covering risk-based KYC, tiered CDD regimes, and AML/CFT frameworks. Developed under the FIGI programme.",
+    "category": "digitalid",
+    "tags": [
+      "financial inclusion",
+      "KYC",
+      "AML/CFT",
+      "regulatory toolkit",
+      "FIGI"
+    ],
+    "country": "Global",
+    "datePublished": "2022-05",
+    "sourceOrg": "World Bank ID4D",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "s5",
+    "title": "Guidelines for ID4D Diagnostics",
+    "url": "https://id4d.worldbank.org/Diagnostic-Guidelines",
+    "description": "Methodology for country-level diagnostics of existing and planned ID systems, covering institutions, technology, law, policy, and practice. Guided by the ten Principles on Identification for Sustainable Development.",
+    "category": "digitalid",
+    "tags": [
+      "diagnostics",
+      "ID ecosystem",
+      "country assessment",
+      "ID principles"
+    ],
+    "country": "Global",
+    "datePublished": "2019-01",
+    "sourceOrg": "World Bank ID4D",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "s6",
+    "title": "MOSIP — Modular Open Source Identity Platform",
+    "url": "https://mosip.io",
+    "description": "Open-source digital ID platform deployed across 10+ countries. Modular, configurable, privacy-by-design. A leading DPG for foundational identity.",
+    "category": "digitalid",
+    "tags": [
+      "DPG",
+      "open source",
+      "biometrics",
+      "foundational ID"
+    ],
+    "country": "Global",
+    "datePublished": "2023-01",
+    "sourceOrg": "MOSIP",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "s7",
+    "title": "Data Empowerment and Protection Architecture (DEPA)",
+    "url": "https://depa.world",
+    "description": "India's consent-based data sharing framework. Introduces Account Aggregators and a user-centric data portability model across financial, health, and other sectors.",
+    "category": "datasharing",
+    "tags": [
+      "consent",
+      "data portability",
+      "account aggregator",
+      "India Stack"
+    ],
+    "country": "India",
+    "datePublished": "2021-08",
+    "sourceOrg": "iSPIRT / India MeitY",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "s8",
+    "title": "Digital Health DPI Framework",
+    "url": "https://digitalhealthdpi.org",
+    "description": "Applies the DPI lens to national health systems — unified health IDs, health data exchanges, and facility and provider registries.",
+    "category": "sectoral",
+    "tags": [
+      "health",
+      "UHI",
+      "FHIR",
+      "health registries"
+    ],
+    "country": "Global",
+    "datePublished": "2023-09",
+    "sourceOrg": "Lancet & FT Commission",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "s9",
+    "title": "The Empirical Case for DPI: Evidence from LMICs",
+    "url": "https://www.co-develop.net/resource/empirical-case-dpi",
+    "description": "Synthesises evidence across 30+ countries on DPI's measurable impact on financial inclusion, service delivery, and economic growth.",
+    "category": "dpiresearch",
+    "tags": [
+      "evidence",
+      "impact",
+      "LMICs",
+      "financial inclusion"
+    ],
+    "country": "Global",
+    "datePublished": "2023-11",
+    "sourceOrg": "Co-Develop",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e1",
+    "title": "What is Digital Public Infrastructure?",
+    "url": "https://medium.com/iipp-blog/what-is-digital-public-infrastructure-6fbfa74f2f8c",
+    "description": "David Eaves and Jordan Sandman lay out a framework for understanding, designing, and deploying DPI — grounded in four principles: inclusive, foundational, interoperable, and publicly accountable.",
+    "category": "dpi101",
+    "tags": [
+      "DPI framework",
+      "conceptual",
+      "inclusion",
+      "interoperability"
+    ],
+    "country": "Global",
+    "datePublished": "2023-04",
+    "sourceOrg": "UCL IIPP / Co-Develop",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e2",
+    "title": "How Digital Public Infrastructure Supports Empowerment, Inclusion, and Resilience",
+    "url": "https://blogs.worldbank.org/digital-development/how-digital-public-infrastructure-supports-empowerment-inclusion-and-resilience",
+    "description": "World Bank blog making the case for DPI as a foundation for inclusive and resilient digital economies, drawing on cross-country evidence.",
+    "category": "dpi101",
+    "tags": [
+      "inclusion",
+      "resilience",
+      "World Bank",
+      "DPI case"
+    ],
+    "country": "Global",
+    "datePublished": "2022-09",
+    "sourceOrg": "World Bank",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e3",
+    "title": "DPI Overview — CDPI",
+    "url": "https://docs.cdpi.dev/dpi/readme",
+    "description": "Centre for Digital Public Infrastructure's concise explainer on what DPI is, how it works, and why it matters — a practical reference for practitioners.",
+    "category": "dpi101",
+    "tags": [
+      "explainer",
+      "CDPI",
+      "overview"
+    ],
+    "country": "Global",
+    "datePublished": "2023-01",
+    "sourceOrg": "CDPI",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e4",
+    "title": "The Case for Investing in Digital Public Infrastructure",
+    "url": "https://hbr.org/2023/05/the-case-for-investing-in-digital-public-infrastructure",
+    "description": "Harvard Business Review piece arguing that DPI investment is essential for inclusive economic growth, particularly in emerging markets.",
+    "category": "dpi101",
+    "tags": [
+      "investment",
+      "economic growth",
+      "emerging markets"
+    ],
+    "country": "Global",
+    "datePublished": "2023-05",
+    "sourceOrg": "Harvard Business Review",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e5",
+    "title": "Explainer: What is DPI?",
+    "url": "https://www.gatesfoundation.org/ideas/articles/what-is-digital-public-infrastructure",
+    "description": "Gates Foundation accessible explainer on DPI — what it is, why governments are building it, and how it can accelerate development outcomes.",
+    "category": "dpi101",
+    "tags": [
+      "explainer",
+      "Gates Foundation",
+      "overview"
+    ],
+    "country": "Global",
+    "datePublished": "2023-06",
+    "sourceOrg": "Gates Foundation",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e6",
+    "title": "Government as a Platform",
+    "url": "https://www.oreilly.com/library/view/open-government/9781449381936/ch02.html",
+    "description": "Tim O'Reilly's foundational essay arguing governments should act as platforms — providing shared infrastructure on which others build services. A precursor to modern DPI thinking.",
+    "category": "blueprints",
+    "tags": [
+      "government as platform",
+      "open government",
+      "foundational"
+    ],
+    "country": "Global",
+    "datePublished": "2010-01",
+    "sourceOrg": "O'Reilly",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e7",
+    "title": "G20 New Delhi Leaders' Declaration",
+    "url": "https://www.g20.org/content/dam/gtwenty/gtwenty_new/document/G20-New-Delhi-Leaders-Declaration.pdf",
+    "description": "The G20 New Delhi Declaration includes landmark multilateral consensus on DPI as a driver of inclusive growth — a key policy milestone for global DPI adoption.",
+    "category": "blueprints",
+    "tags": [
+      "G20",
+      "multilateral",
+      "policy",
+      "DPI consensus"
+    ],
+    "country": "Global",
+    "datePublished": "2023-09",
+    "sourceOrg": "G20",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e8",
+    "title": "G20 Digital Economy Ministers Meeting Outcome Document",
+    "url": "https://www.g20.org/content/dam/gtwenty/gtwenty_new/document/G20_Digital_Economy_Outcome_Document%20_and_Chair%27s_Summary_19082023.pdf",
+    "description": "Outcome document from the G20 Digital Economy Ministerial — covers DPI, AI governance, cybersecurity, and digital public goods as priorities for the global digital economy.",
+    "category": "blueprints",
+    "tags": [
+      "G20",
+      "digital economy",
+      "ministerial",
+      "DPI",
+      "AI governance"
+    ],
+    "country": "Global",
+    "datePublished": "2023-08",
+    "sourceOrg": "G20",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e9",
+    "title": "What is Good DPI?",
+    "url": "https://dial.global/good-dpi/",
+    "description": "DIAL's framework for what makes DPI good — principles and criteria for evaluating whether a DPI system is truly open, inclusive, and trustworthy.",
+    "category": "dpi101",
+    "tags": [
+      "DIAL",
+      "good DPI",
+      "principles",
+      "evaluation"
+    ],
+    "country": "Global",
+    "datePublished": "2023-03",
+    "sourceOrg": "DIAL",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e10",
+    "title": "The DPI Approach: A Playbook",
+    "url": "https://www.undp.org/publications/dpi-approach-playbook",
+    "description": "UNDP and Aapti Institute playbook on implementing the DPI approach — practical guidance for governments and development practitioners on designing and deploying DPI.",
+    "category": "dpi101",
+    "tags": [
+      "playbook",
+      "UNDP",
+      "implementation",
+      "Aapti"
+    ],
+    "country": "Global",
+    "datePublished": "2023-07",
+    "sourceOrg": "UNDP / Aapti",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e11",
+    "title": "Understanding DPI: What it Means — and Why it Matters — to Businesses and Governments in Emerging Markets",
+    "url": "https://nextbillion.net/digital-public-infrastructure-why-it-matters-business-governments-emerging-markets/",
+    "description": "NextBillion piece exploring how DPI creates market opportunities and governance advantages in emerging economies, from the perspective of both public and private actors.",
+    "category": "dpi101",
+    "tags": [
+      "emerging markets",
+      "private sector",
+      "business",
+      "governance"
+    ],
+    "country": "Global",
+    "datePublished": "2022-11",
+    "sourceOrg": "Next Billion",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e12",
+    "title": "What is the DPI Approach?",
+    "url": "https://carnegieindia.org/2023/05/15/what-is-dpi-approach-pub-89721",
+    "description": "Carnegie India piece unpacking the DPI approach — what distinguishes it from conventional digitisation and why it matters for India and other emerging economies.",
+    "category": "dpi101",
+    "tags": [
+      "DPI approach",
+      "Carnegie India",
+      "India",
+      "policy"
+    ],
+    "country": "India",
+    "datePublished": "2023-05",
+    "sourceOrg": "Carnegie India",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e13",
+    "title": "Digital Public Goods: Enablers of Digital Sovereignty",
+    "url": "https://www.oecd-ilibrary.org/sites/c023cb2e-en/index.html?itemId=/content/component/c023cb2e-en",
+    "description": "OECD essay examining how digital public goods underpin digital sovereignty — covering open-source infrastructure, data governance, and the role of DPGs in national digital strategies.",
+    "category": "dpi101",
+    "tags": [
+      "DPG",
+      "digital sovereignty",
+      "OECD",
+      "open source"
+    ],
+    "country": "Global",
+    "datePublished": "2023-01",
+    "sourceOrg": "OECD",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e14",
+    "title": "Co-Develop: DPI for an Equitable Recovery",
+    "url": "https://www.rockefellerfoundation.org/report/co-develop-digital-public-infrastructure-for-an-equitable-recovery/",
+    "description": "Rockefeller Foundation report making the case for DPI investment as a tool for post-pandemic equitable recovery, with evidence from multiple country deployments.",
+    "category": "dpiresearch",
+    "tags": [
+      "equitable recovery",
+      "Rockefeller",
+      "post-pandemic",
+      "investment"
+    ],
+    "country": "Global",
+    "datePublished": "2022-01",
+    "sourceOrg": "Rockefeller Foundation",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e15",
+    "title": "Promise and Pitfalls of Digital Government",
+    "url": "https://www.economist.com/by-invitation/2023/07/05/david-eaves-on-the-promise-and-pitfalls-of-digital-government",
+    "description": "David Eaves in The Economist on what governments get right and wrong when building digital infrastructure — and what separates successful DPI from failed digitisation.",
+    "category": "dpi101",
+    "tags": [
+      "digital government",
+      "pitfalls",
+      "The Economist",
+      "David Eaves"
+    ],
+    "country": "Global",
+    "datePublished": "2023-07",
+    "sourceOrg": "The Economist",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e16",
+    "title": "Stacking up the Benefits: Lessons from India's Digital Journey",
+    "url": "https://www.imf.org/en/Publications/WP/Issues/2023/03/31/Stacking-up-the-Benefits-Lessons-from-Indias-Digital-Journey-531692",
+    "description": "IMF working paper quantifying the macroeconomic and welfare benefits of India Stack — covering Aadhaar, UPI, and the broader DPI ecosystem, with lessons for other countries.",
+    "category": "dpiresearch",
+    "tags": [
+      "India Stack",
+      "IMF",
+      "macroeconomic",
+      "welfare",
+      "evidence"
+    ],
+    "country": "India",
+    "datePublished": "2023-03",
+    "sourceOrg": "IMF",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e17",
+    "title": "The Right Way to Build DPI: 5 Insights",
+    "url": "https://www.weforum.org/agenda/2022/08/digital-public-infrastructure/",
+    "description": "World Economic Forum piece distilling five key design principles for building DPI that is truly inclusive, interoperable, and trustworthy — drawing on global case studies.",
+    "category": "dpi101",
+    "tags": [
+      "design principles",
+      "WEF",
+      "best practices"
+    ],
+    "country": "Global",
+    "datePublished": "2022-08",
+    "sourceOrg": "World Economic Forum",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e18",
+    "title": "Best Practices for the Governance of Digital Public Goods",
+    "url": "https://ash.harvard.edu/files/ash/files/best_practices_for_the_governance_of_digital_public_goods.pdf",
+    "description": "Harvard Kennedy School Ash Center report on governance models for DPGs — covering accountability, stewardship, and institutional design for open digital infrastructure.",
+    "category": "dpi101",
+    "tags": [
+      "DPG",
+      "governance",
+      "Harvard",
+      "Ash Center",
+      "open source"
+    ],
+    "country": "Global",
+    "datePublished": "2022-04",
+    "sourceOrg": "Harvard Ash Center",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e19",
+    "title": "Exploring Different Financing Models for DPI and Why They Matter",
+    "url": "https://www.orfonline.org/research/exploring-different-financing-models-for-digital-public-infrastructure/",
+    "description": "ORF research paper mapping the range of financing models for DPI — from public funding to blended finance — and their implications for sustainability and equity.",
+    "category": "dpiresearch",
+    "tags": [
+      "financing",
+      "ORF",
+      "blended finance",
+      "sustainability"
+    ],
+    "country": "Global",
+    "datePublished": "2023-02",
+    "sourceOrg": "ORF",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e20",
+    "title": "Why DPI Can Be a Game Changer for Children",
+    "url": "https://www.weforum.org/agenda/2023/01/digital-public-infrastructure-is-a-gamechanger-for-children",
+    "description": "WEF piece on how DPI systems — digital ID, payments, and data exchange — can unlock better outcomes for children in health, education, and social protection.",
+    "category": "sectoral",
+    "tags": [
+      "children",
+      "education",
+      "social protection",
+      "WEF"
+    ],
+    "country": "Global",
+    "datePublished": "2023-01",
+    "sourceOrg": "World Economic Forum",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e21",
+    "title": "India Stack: Are We There Yet?",
+    "url": "https://economictimes.indiatimes.com/tech/catalysts/ettech-opinion-india-stack-are-we-there-yet/articleshow/96643696.cms",
+    "description": "Dr. Pramod Varma reflects on the progress and gaps in India Stack — what has worked, what remains unfinished, and where the next frontier lies.",
+    "category": "blueprints",
+    "tags": [
+      "India Stack",
+      "Aadhaar",
+      "UPI",
+      "reflection"
+    ],
+    "country": "India",
+    "datePublished": "2023-01",
+    "sourceOrg": "The Economic Times",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e22",
+    "title": "The Case for Digital Public Infrastructure",
+    "url": "https://knightcolumbia.org/content/the-case-for-digital-public-infrastructure",
+    "description": "Ethan Zuckerman's argument for DPI as an alternative to platform capitalism — why public digital infrastructure is essential for democratic societies.",
+    "category": "dpi101",
+    "tags": [
+      "platform capitalism",
+      "democracy",
+      "public interest",
+      "Knight Columbia"
+    ],
+    "country": "Global",
+    "datePublished": "2020-01",
+    "sourceOrg": "Knight Columbia",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e23",
+    "title": "Government as a Platform: How Policy Makers Should Think About the Foundations of DPI",
+    "url": "https://ksr.hkspublications.org/2020/01/14/government-as-a-platform-how-policy-makers-should-think-about-the-foundations-of-digital-public-infrastructure/",
+    "description": "Harvard Kennedy School piece applying the government-as-a-platform concept to DPI — practical framing for policymakers on what to build and how to govern it.",
+    "category": "blueprints",
+    "tags": [
+      "government as platform",
+      "policy",
+      "HKS",
+      "David Eaves"
+    ],
+    "country": "Global",
+    "datePublished": "2020-01",
+    "sourceOrg": "HKS Publications",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e24",
+    "title": "DPI: The Story of India's Digital Revolution",
+    "url": "https://indianexpress.com/article/opinion/columns/digital-india-vision-department-of-telecom-pm-wani-upi-8945834/",
+    "description": "Dr. RS Sharma traces India's DPI journey — from Aadhaar's early days through UPI and ONDC — and makes the case for India's model as a global template.",
+    "category": "blueprints",
+    "tags": [
+      "India Stack",
+      "UPI",
+      "Aadhaar",
+      "ONDC",
+      "digital revolution"
+    ],
+    "country": "India",
+    "datePublished": "2023-05",
+    "sourceOrg": "Indian Express",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e25",
+    "title": "The Making of Aadhaar: World's Largest Identity Platform",
+    "url": "https://www.amazon.in/MAKING-AADHAAR-Largest-Identity-Platform/dp/9390356121",
+    "description": "Dr. RS Sharma's firsthand account of building Aadhaar — the world's largest biometric identity system — covering the technical, institutional, and political challenges of deploying DPI at scale.",
+    "category": "digitalid",
+    "tags": [
+      "Aadhaar",
+      "biometrics",
+      "India",
+      "foundational ID",
+      "book"
+    ],
+    "country": "India",
+    "datePublished": "2021-01",
+    "sourceOrg": "Rupa Publications",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e26",
+    "title": "Making DPI and AI Work for Welfare Services",
+    "url": "https://societalthinking.org/blog/making-dpi-and-ai-work-for-welfare-services/",
+    "description": "Explores how combining DPI with AI can improve last-mile delivery of welfare services — with examples from India's social protection stack.",
+    "category": "sectoral",
+    "tags": [
+      "AI",
+      "welfare",
+      "social protection",
+      "last mile"
+    ],
+    "country": "India",
+    "datePublished": "2023-08",
+    "sourceOrg": "Societal Thinking",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e27",
+    "title": "Addressing Climate Change with DPI",
+    "url": "https://www.codevelop.fund/addressing-climate-change-with-dpi",
+    "description": "Co-Develop piece on how DPI systems can support climate action — from emissions monitoring and carbon markets to climate finance and disaster response.",
+    "category": "sectoral",
+    "tags": [
+      "climate",
+      "carbon markets",
+      "emissions",
+      "Co-Develop"
+    ],
+    "country": "Global",
+    "datePublished": "2023-06",
+    "sourceOrg": "Co-Develop",
+    "dateAdded": "2025-03-20"
+  },
+  {
+    "id": "e28",
+    "title": "An Explosion of DPI",
+    "url": "https://exmachina.substack.com/p/an-explosion-of-dpi",
+    "description": "Rahul Matthan's essay surveying the rapid global spread of DPI — from India Stack to Brazil's Pix — and what this proliferation means for governance and sovereignty.",
+    "category": "dpi101",
+    "tags": [
+      "global spread",
+      "Rahul Matthan",
+      "India Stack",
+      "Pix",
+      "proliferation"
+    ],
+    "country": "Global",
+    "datePublished": "2023-04",
+    "sourceOrg": "Ex Machina",
+    "dateAdded": "2025-03-20"
+  }
+]
