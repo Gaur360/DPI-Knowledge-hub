@@ -1,5 +1,20 @@
 [
   {
+    "title": "Private Sector Economic Impacts from Identification Systems",
+    "url": "https://openknowledge.worldbank.org/entities/publication/077b56f8-2031-5d02-a17f-d40285753747",
+    "description": "This paper provides an understanding of the financial benefits of identification systems for the private sector.",
+    "category": "digitalid",
+    "tags": [
+      "Digital id",
+      "benefits"
+    ],
+    "country": "Global",
+    "datePublished": "2018",
+    "sourceOrg": "World Bank",
+    "id": "mn2veudb",
+    "dateAdded": "2026-03-23"
+  },
+  {
     "title": "Types of ID systems - Practitioners Guide",
     "url": "https://id4d.worldbank.org/guide/types-id-systems",
     "description": "Identity as Digital Public Infrastructure: Foundational & Functional Models\nDocumentation and analysis of ID system architectures. Compares broad-based legal identity frameworks with sectoral functional systems, highlighting how different regions establish recognized proof of identity for rights and services.",
