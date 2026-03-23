@@ -1,5 +1,29 @@
 [
   {
+    "title": "Digital Public Infrastructure: Landscape and Opportunities in South Asia",
+    "url": "https://www.adb.org/publications/digital-public-infrastructure-south-asia",
+    "description": "The publication explains how DPI acts as a foundation for digital economies and how it is being adopted in health, education, agriculture, transport, and logistics. It looks at gaps, challenges, and opportunities in six countries: Bangladesh, Bhutan, India, Maldives, Nepal, and Sri Lanka. It also discusses DPI use cases from outside the region. The publication shares practical insights on how DPI can contribute to better development outcomes.",
+    "category": "dpiresearch",
+    "tags": [
+      "DPI",
+      "digital ID",
+      "Fast payment systems",
+      "data sharing",
+      "South Asia",
+      "India",
+      "Nepal",
+      "Bhutan",
+      "Bangladesh",
+      "Maldives",
+      "Sri Lanka"
+    ],
+    "country": "South Asia",
+    "datePublished": "2025",
+    "sourceOrg": "ADB",
+    "id": "mn2nmjk1",
+    "dateAdded": "2026-03-23"
+  },
+  {
     "title": "Catalog of Technical Standards for Digital Identification Systems",
     "url": "https://documents.worldbank.org/en/publication/documents-reports/documentdetail/707151536126464867",
     "description": "Standards establish universally understood and consistent interchange protocols, testing regimes, quality measures, and best practices with regard to the capture, storage, transmission, and use of identity data, as well as the format and features of identity credentials and authentication protocols. Therefore they are crucial at each stage of the identity lifecycle, including enrollment, validation, deduplication, and authentication.  Standards help ensure that the building blocks of identity systems are interoperable and testable, and can meet desired performance targets. The effectiveness of an interconnected and interoperable identification system cannot be ensured without standards. This catalog of technical standards can serve as a source of reference for the stakeholders in the identification systems ecosystem.",
