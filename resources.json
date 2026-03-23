@@ -177,24 +177,6 @@
     "dateAdded": "2025-03-20"
   },
   {
-    "id": "s4",
-    "title": "Digital ID to Enhance Financial Inclusion: A Toolkit for Regulatory Authorities",
-    "url": "https://openknowledge.worldbank.org/entities/publication/077b56f8-2031-5d02-a17f-d40285753747",
-    "description": "World Bank toolkit for regulators on leveraging digital ID to deepen financial inclusion, covering risk-based KYC, tiered CDD regimes, and AML/CFT frameworks. Developed under the FIGI programme.",
-    "category": "digitalid",
-    "tags": [
-      "financial inclusion",
-      "KYC",
-      "AML/CFT",
-      "regulatory toolkit",
-      "FIGI"
-    ],
-    "country": "Global",
-    "datePublished": "2022-05",
-    "sourceOrg": "World Bank ID4D",
-    "dateAdded": "2025-03-20"
-  },
-  {
     "id": "s5",
     "title": "Guidelines for ID4D Diagnostics",
     "url": "https://id4d.worldbank.org/Diagnostic-Guidelines",
