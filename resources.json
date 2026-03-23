@@ -1,5 +1,21 @@
 [
   {
+    "title": "Catalog of Technical Standards for Digital Identification Systems",
+    "url": "https://documents.worldbank.org/en/publication/documents-reports/documentdetail/707151536126464867",
+    "description": "Standards establish universally understood and consistent interchange protocols, testing regimes, quality measures, and best practices with regard to the capture, storage, transmission, and use of identity data, as well as the format and features of identity credentials and authentication protocols. Therefore they are crucial at each stage of the identity lifecycle, including enrollment, validation, deduplication, and authentication.  Standards help ensure that the building blocks of identity systems are interoperable and testable, and can meet desired performance targets. The effectiveness of an interconnected and interoperable identification system cannot be ensured without standards. This catalog of technical standards can serve as a source of reference for the stakeholders in the identification systems ecosystem.",
+    "category": "digitalid",
+    "tags": [
+      "Digital ID",
+      "Standards",
+      "biometrics"
+    ],
+    "country": "Global",
+    "datePublished": "  2022",
+    "sourceOrg": "World Bank",
+    "id": "mn2njwgm",
+    "dateAdded": "2026-03-23"
+  },
+  {
     "title": "The DigiLocker Story: How India is digitising its documents",
     "url": "https://www.ucl.ac.uk/bartlett/publications/2025/oct/digilocker-story-how-india-digitising-its-documents",
     "description": "A case study by Ritul Gaur and David Eaves on DigiLocker, India's digital wallet and data sharing app. The case study highlights the tradeoffs that Government of India had to make in building DigiLocker. ",
