@@ -175,13 +175,13 @@
     .ai-panel { position: fixed; bottom: 24px; right: 24px; z-index: 50; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
     .ai-fab { width: 46px; height: 46px; border-radius: 50%; background: var(--navy); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 16px rgba(27,58,92,0.3); transition: background 0.15s, transform 0.15s; }
     .ai-fab:hover { background: var(--navy-mid); transform: scale(1.04); }
-    .ai-window { width: 340px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 8px 32px rgba(10,15,25,0.12); display: flex; flex-direction: column; max-height: 460px; animation: slideUp 0.2s ease; }
+    .ai-window { width: 360px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 8px 32px rgba(10,15,25,0.12); display: flex; flex-direction: column; max-height: 520px; animation: slideUp 0.2s ease; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     .ai-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; }
     .ai-header-name { font-family: var(--serif); font-size: 14px; font-weight: 600; color: var(--navy); display: flex; align-items: center; gap: 6px; }
     .ai-header-sub { font-size: 10.5px; color: var(--text-3); margin-top: 2px; }
-    .ai-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-height: 180px; }
-    .ai-msg { max-width: 88%; font-size: 12.5px; line-height: 1.6; padding: 9px 12px; border-radius: 10px; }
+    .ai-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-height: 220px; }
+    .ai-msg { max-width: 90%; font-size: 12px; line-height: 1.65; padding: 10px 13px; border-radius: 10px; }
     .ai-msg.user { background: var(--navy); color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; }
     .ai-msg.assistant { background: var(--bg); color: var(--text); align-self: flex-start; border-bottom-left-radius: 3px; border: 1px solid var(--border); }
     .ai-msg.thinking { color: var(--text-3); font-style: italic; background: var(--bg); border: 1px solid var(--border); }
@@ -199,6 +199,7 @@
 
     /* ── Mobile ── */
     @media (max-width: 680px) {
+      .ai-backdrop { display: block !important; position: fixed; inset: 0; background: rgba(10,15,25,0.3); z-index: 59; }
       .header { padding: 0 14px; gap: 8px; }
       .logo-name { font-size: 14px; }
       .search-wrap input { width: 130px; }
@@ -229,8 +230,20 @@
       .add-view { padding: 20px 16px 50px; }
       .two-col { grid-template-columns: 1fr; }
       .modal { border-radius: 16px 16px 0 0; padding: 20px 18px 36px; }
-      .ai-panel { bottom: 16px; right: 16px; }
-      .ai-window { width: calc(100vw - 32px); }
+      .ai-panel { bottom: 0; right: 0; left: 0; align-items: stretch; gap: 0; }
+      .ai-fab { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; }
+      .ai-window {
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        width: 100%;
+        max-height: 75vh;
+        border-radius: 20px 20px 0 0;
+        border-bottom: none;
+        box-shadow: 0 -4px 30px rgba(10,15,25,0.15);
+        z-index: 60;
+      }
+      .ai-messages { min-height: 160px; }
+      .ai-msg { max-width: 95%; }
     }
 
     /* ── Tablet ── */
@@ -379,6 +392,20 @@
       );
     }
 
+    // ── Simple markdown renderer ──
+    function renderMarkdown(text) {
+      return text
+        .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+        .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
+        .replace(/\*(.+?)\*/g,"<em>$1</em>")
+        .replace(/^### (.+)$/gm,"<h4 style='font-family:var(--serif);font-size:13px;font-weight:600;color:var(--navy);margin:10px 0 4px;'>$1</h4>")
+        .replace(/^## (.+)$/gm,"<h3 style='font-family:var(--serif);font-size:14px;font-weight:600;color:var(--navy);margin:12px 0 5px;'>$1</h3>")
+        .replace(/^# (.+)$/gm,"<h2 style='font-family:var(--serif);font-size:15px;font-weight:600;color:var(--navy);margin:12px 0 6px;'>$1</h2>")
+        .replace(/^[-•] (.+)$/gm,"<div style='display:flex;gap:7px;margin:3px 0;'><span style='flex-shrink:0;color:var(--navy-mid);margin-top:1px;'>·</span><span>$1</span></div>")
+        .replace(/\n\n/g,"<div style='height:8px'></div>")
+        .replace(/\n/g,"<br/>");
+    }
+
     // ── AI Panel ──
     function AiPanel({ resources, apiKey, onNeedKey }) {
       const [open, setOpen] = useState(false);
@@ -406,7 +433,13 @@
       return (
         <div className="ai-panel">
           {open && (
-            <div className="ai-window">
+            <>
+              <div
+                onClick={()=>setOpen(false)}
+                style={{display:"none"}}
+                className="ai-backdrop"
+              />
+              <div className="ai-window">
               <div className="ai-header">
                 <div>
                   <div className="ai-header-name"><Icon.Sparkle /> Ask the library</div>
@@ -423,7 +456,13 @@
                 <>
                   <div className="ai-messages">
                     {messages.length===0 && <div className="ai-empty">Ask anything — which resources cover payments, what does the World Bank say about digital ID, which papers are from India...</div>}
-                    {messages.map((m,i)=><div key={i} className={`ai-msg ${m.role}`}>{m.content}</div>)}
+                    {messages.map((m,i)=>(
+                      <div key={i} className={`ai-msg ${m.role}`}>
+                        {m.role==="assistant"
+                          ? <span dangerouslySetInnerHTML={{__html: renderMarkdown(m.content)}} />
+                          : m.content}
+                      </div>
+                    ))}
                     {thinking && <div className="ai-msg thinking">Thinking...</div>}
                     <div ref={bottomRef} />
                   </div>
@@ -434,6 +473,7 @@
                 </>
               )}
             </div>
+            </>
           )}
           <button className="ai-fab" onClick={()=>setOpen(v=>!v)} title="Ask the library">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"/></svg>
