@@ -1,5 +1,21 @@
 [
   {
+    "title": "India - The Aadhaar Act, 2016",
+    "url": "https://uidai.gov.in/images/Aadhaar_Act_2016_as_amended.pdf",
+    "description": "The Aadhaar Act, 2016 (\"Targeted Delivery of Financial and Other Subsidies, Benefits and Services Act, 2016\") provides a legal framework for the unique biometric identification system in India. It aims to improve transparency and efficiency in delivering government subsidies directly to beneficiaries using a 12-digit UIDAI-issued number",
+    "category": "digitalid",
+    "tags": [
+      "digital ID",
+      "India",
+      "Aadhaar"
+    ],
+    "country": "India",
+    "datePublished": "2016",
+    "sourceOrg": "UIDAI (India)",
+    "id": "mncv2uoi",
+    "dateAdded": "2026-03-30"
+  },
+  {
     "title": "Private Sector Economic Impacts from Identification Systems",
     "url": "https://openknowledge.worldbank.org/entities/publication/077b56f8-2031-5d02-a17f-d40285753747",
     "description": "This paper provides an understanding of the financial benefits of identification systems for the private sector.",
