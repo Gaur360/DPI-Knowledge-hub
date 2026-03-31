@@ -393,7 +393,7 @@
 
     /* ── AI Panel ── */
     .ai-fab {
-      position: fixed; bottom: 24px; right: 24px; z-index: 50;
+      position: fixed; bottom: 28px; right: 28px; z-index: 50;
       width: 50px; height: 50px; border-radius: 50%;
       background: var(--navy-dark); border: none; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
@@ -401,73 +401,44 @@
       transition: background 0.15s, transform 0.15s;
     }
     .ai-fab:hover { background: var(--navy); transform: scale(1.06); }
-
-    .ai-backdrop {
-      display: none; position: fixed; inset: 0;
-      background: rgba(10,15,25,0.3); z-index: 59;
-    }
+    .ai-backdrop { display: none; position: fixed; inset: 0; background: rgba(10,15,25,0.25); z-index: 59; }
     .ai-window {
-      position: fixed; bottom: 0; right: 24px;
-      width: 480px; z-index: 60;
+      position: fixed; bottom: 28px; right: 28px;
+      width: 420px; z-index: 60;
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 16px 16px 0 0;
-      box-shadow: 0 -8px 40px rgba(10,15,25,0.15);
+      border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(10,15,25,0.18);
       display: flex; flex-direction: column;
-      height: 640px;
+      height: 580px;
       animation: slideUp 0.22s ease;
     }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-
+    @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     .ai-header {
       padding: 16px 18px 14px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
       display: flex; align-items: flex-start; justify-content: space-between;
       background: var(--navy-dark); border-radius: 16px 16px 0 0;
+      flex-shrink: 0;
     }
-    .ai-header-name {
-      font-family: var(--serif); font-size: 14.5px; font-weight: 600;
-      color: #fff; display: flex; align-items: center; gap: 7px;
-    }
+    .ai-header-name { font-family: var(--serif); font-size: 15px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 7px; }
     .ai-header-sub { font-size: 10.5px; color: rgba(255,255,255,0.45); margin-top: 3px; }
-    .ai-header-close { background: none; border: none; cursor: pointer; color: rgba(255,255,255,0.5); display: flex; padding: 2px; }
-    .ai-header-close:hover { color: #fff; }
-
+    .ai-header-close { background: rgba(255,255,255,0.1); border: none; cursor: pointer; color: rgba(255,255,255,0.7); display: flex; padding: 5px; border-radius: 6px; }
+    .ai-header-close:hover { background: rgba(255,255,255,0.2); color: #fff; }
     .ai-messages {
       flex: 1; overflow-y: auto; padding: 16px;
       display: flex; flex-direction: column; gap: 12px;
-      min-height: 200px; background: var(--surface-2);
+      background: var(--surface-2);
     }
-    .ai-msg {
-      max-width: 85%; font-size: 13px; line-height: 1.7;
-      padding: 11px 15px; border-radius: 12px;
-
-    .ai-msg.user {
-      background: var(--navy); color: #fff;
-      align-self: flex-end; border-bottom-right-radius: 4px;
-    }
-    .ai-msg.assistant {
-      background: var(--surface); color: var(--text);
-      align-self: flex-start; border-bottom-left-radius: 4px;
-      border: 1px solid var(--border);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-    }
+    .ai-msg { max-width: 85%; font-size: 13px; line-height: 1.7; padding: 11px 15px; border-radius: 12px; }
+    .ai-msg.user { background: var(--navy); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .ai-msg.assistant { background: var(--surface); color: var(--text); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
     .ai-msg.thinking { color: var(--text-3); font-style: italic; background: var(--surface); border: 1px solid var(--border); }
-    .ai-empty { font-size: 12px; color: var(--text-3); text-align: center; padding: 24px 16px; line-height: 1.7; }
-    .ai-empty strong { display: block; color: var(--text-2); font-weight: 500; margin-bottom: 4px; font-size: 13px; }
-
-    .ai-input-row {
-      padding: 12px 14px; border-top: 1px solid var(--border);
-      display: flex; gap: 8px; background: var(--surface);
-    }
-    .ai-input-row input {
-      flex: 1; font-size: 13px; background: var(--bg); border-color: transparent;
-    }
+    .ai-empty { font-size: 12.5px; color: var(--text-3); text-align: center; padding: 28px 20px; line-height: 1.75; }
+    .ai-empty strong { display: block; color: var(--text-2); font-weight: 500; margin-bottom: 6px; font-size: 14px; }
+    .ai-input-row { padding: 12px 14px; border-top: 1px solid var(--border); display: flex; gap: 8px; background: var(--surface); border-radius: 0 0 16px 16px; flex-shrink: 0; }
+    .ai-input-row input { flex: 1; font-size: 13px; background: var(--bg); border-color: transparent; }
     .ai-input-row input:focus { background: var(--surface); border-color: var(--navy-mid); }
-    .ai-send {
-      background: var(--navy); color: #fff; border: none;
-      border-radius: 7px; padding: 7px 14px; font-size: 12px;
-      cursor: pointer; transition: background 0.15s; display: flex; align-items: center; gap: 5px;
-    }
+    .ai-send { background: var(--navy); color: #fff; border: none; border-radius: 7px; padding: 7px 14px; font-size: 12px; cursor: pointer; transition: background 0.15s; display: flex; align-items: center; gap: 5px; }
     .ai-send:hover { background: var(--navy-mid); }
     .ai-send:disabled { opacity: 0.4; cursor: wait; }
 
@@ -510,10 +481,11 @@
       .two-col { grid-template-columns: 1fr; }
       .modal { border-radius: 20px 20px 0 0; padding: 22px 18px 36px; }
       .ai-fab { bottom: 18px; right: 18px; width: 48px; height: 48px; }
+      .ai-backdrop.open { display: block; }
       .ai-window {
-        right: 0; left: 0; width: 100%;
+        bottom: 0; right: 0; left: 0; width: 100%;
+        height: 72vh;
         border-radius: 20px 20px 0 0;
-        max-height: 72vh;
       }
     }
 
