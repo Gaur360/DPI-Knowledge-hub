@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -8,8 +9,9 @@
   <script>
     const GITHUB_OWNER = "Gaur360";
     const GITHUB_REPO  = "DPI-Knowledge-hub";
-
-const AI_PROXY_URL = "https://dpi-knowledge-hub-b2tq.vercel.app/api/chat";
+    // Once you deploy to Vercel, replace this with your Vercel URL:
+    // e.g. "https://dpi-knowledge-hub.vercel.app/api/chat"
+    const AI_PROXY_URL = "https://YOUR-VERCEL-APP.vercel.app/api/chat";
   </script>
 
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -406,12 +408,12 @@ const AI_PROXY_URL = "https://dpi-knowledge-hub-b2tq.vercel.app/api/chat";
     }
     .ai-window {
       position: fixed; bottom: 0; right: 24px;
-      width: 380px; z-index: 60;
+      width: 480px; z-index: 60;
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 16px 16px 0 0;
-      box-shadow: 0 -4px 30px rgba(10,15,25,0.12);
+      box-shadow: 0 -8px 40px rgba(10,15,25,0.15);
       display: flex; flex-direction: column;
-      max-height: 540px;
+      height: 640px;
       animation: slideUp 0.22s ease;
     }
     @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
@@ -436,9 +438,9 @@ const AI_PROXY_URL = "https://dpi-knowledge-hub-b2tq.vercel.app/api/chat";
       min-height: 200px; background: var(--surface-2);
     }
     .ai-msg {
-      max-width: 90%; font-size: 12.5px; line-height: 1.65;
-      padding: 10px 14px; border-radius: 12px;
-    }
+      max-width: 85%; font-size: 13px; line-height: 1.7;
+      padding: 11px 15px; border-radius: 12px;
+
     .ai-msg.user {
       background: var(--navy); color: #fff;
       align-self: flex-end; border-bottom-right-radius: 4px;
@@ -880,6 +882,7 @@ const AI_PROXY_URL = "https://dpi-knowledge-hub-b2tq.vercel.app/api/chat";
           <header className="header">
             <div className="logo">
               <div className="logo-name">DPI Knowledge Hub</div>
+              <div className="logo-tag">ADB · DIG</div>
             </div>
             <div className="spacer" />
             <div className="search-wrap">
