@@ -1,5 +1,22 @@
 [
   {
+    "title": "Singpass - technical documentation",
+    "url": "https://docs.developer.singpass.gov.sg/docs/introduction/overview-of-singpass",
+    "description": "Singpass is Singapore's national digital identity authentication provider using the OpenID Connect 1.0 protocol. It stores users' identity information and authenticates them for transactions with government agencies and private organizations online",
+    "category": "digitalid",
+    "resourceType": "Practitioner Guide",
+    "tags": [
+      "digital id",
+      "Singpass",
+      "singapore"
+    ],
+    "country": "Singapore",
+    "datePublished": "2026",
+    "sourceOrg": "",
+    "id": "mne716tk",
+    "dateAdded": "2026-03-31"
+  },
+  {
     "title": "Philippines Identification System Act ",
     "url": "https://philsys.gov.ph/legal-bases/",
     "description": "Republic Act No. 11055, otherwise known as the “Philippine Identification System Act”, was signed into law by former President Rodrigo Roa Duterte on 06 August 2018. This mandates the PSA to be the implementing agency of the National ID system and the creation of the PhilSys Policy and Coordination Council (PSPCC) to formulate policies and guidelines to ensure effective implementation of the National ID system. Pursuant to RA 11055, its Implementing Rules and Regulations (IRR) was approved by the member-agencies of the PSPCC on 05 October 2018 and was published in Daily Tribune on 06 October 2018.",
