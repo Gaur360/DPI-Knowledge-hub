@@ -4,11 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DPI Knowledge Hub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 
   <script>
     const GITHUB_OWNER = "Gaur360";
     const GITHUB_REPO  = "DPI-Knowledge-hub";
+    // Once you deploy to Vercel, replace this with your Vercel URL:
+    // e.g. "https://dpi-knowledge-hub.vercel.app/api/chat"
+    const AI_PROXY_URL = "https://YOUR-VERCEL-APP.vercel.app/api/chat";
   </script>
 
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -17,191 +20,466 @@
 
   <style>
     :root {
-      --bg:         #F5F3EE;
+      --bg:         #F4F2ED;
       --surface:    #FFFFFF;
-      --border:     #E4E0D8;
-      --border-mid: #D0CCBF;
+      --surface-2:  #F9F8F5;
+      --border:     #E2DED5;
+      --border-mid: #C8C4B8;
       --navy:       #1B3A5C;
       --navy-mid:   #2E5C8A;
-      --navy-light: #EEF2F7;
-      --text:       #1A1A18;
-      --text-2:     #5A5850;
+      --navy-light: #EAF0F7;
+      --navy-dark:  #122640;
+      --text:       #18181A;
+      --text-2:     #56544E;
       --text-3:     #9A9890;
       --red:        #B83232;
-      --green-bg:   #EDF4E8;
-      --green-fg:   #2D5A1B;
+      --gold:       #C4882A;
       --serif:      'Lora', Georgia, serif;
       --sans:       'DM Sans', -apple-system, sans-serif;
     }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
     a { color: inherit; text-decoration: none; }
     button { cursor: pointer; font-family: var(--sans); }
     textarea { resize: vertical; font-family: var(--sans); }
-    input, select, textarea { font-family: var(--sans); font-size: 13px; border: 1px solid var(--border); border-radius: 6px; padding: 8px 11px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; }
+    input, select, textarea {
+      font-family: var(--sans); font-size: 13px;
+      border: 1px solid var(--border); border-radius: 6px;
+      padding: 8px 11px; background: var(--surface); color: var(--text);
+      outline: none; transition: border-color 0.15s;
+    }
     input:focus, select:focus, textarea:focus { border-color: var(--navy-mid); }
 
     /* ── Header ── */
-    .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 20px; height: 54px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 30; }
-    .logo { display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; }
-    .logo-name { font-family: var(--serif); font-size: 15px; font-weight: 600; color: var(--navy); letter-spacing: -0.3px; line-height: 1; }
-    .logo-rule { width: 24px; height: 2px; background: var(--navy); border-radius: 2px; }
+    .header {
+      background: var(--navy-dark);
+      padding: 0 28px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+    .logo { display: flex; align-items: baseline; gap: 10px; }
+    .logo-name {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+      line-height: 1;
+    }
+    .logo-tag {
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.5px;
+      font-weight: 400;
+    }
     .spacer { flex: 1; }
+
     .search-wrap { position: relative; display: flex; align-items: center; }
-    .search-wrap svg { position: absolute; left: 10px; color: var(--text-3); pointer-events: none; }
-    .search-wrap input { padding-left: 32px; width: 200px; background: var(--bg); border-color: transparent; font-size: 12.5px; transition: width 0.2s, background 0.15s; }
-    .search-wrap input:focus { background: var(--surface); border-color: var(--navy-mid); width: 240px; }
-    .btn-primary { background: var(--navy); color: #fff; border: none; border-radius: 6px; padding: 7px 14px; font-size: 12.5px; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: background 0.15s; white-space: nowrap; }
-    .btn-primary:hover { background: var(--navy-mid); }
-    .btn-ghost { background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 12px; color: var(--text-2); display: flex; align-items: center; gap: 5px; transition: border-color 0.15s, background 0.15s; white-space: nowrap; }
-    .btn-ghost:hover { border-color: var(--border-mid); background: var(--bg); }
-    .btn-icon { background: transparent; border: none; padding: 6px; display: flex; align-items: center; color: var(--text-3); border-radius: 5px; transition: color 0.15s, background 0.15s; }
-    .btn-icon:hover { color: var(--text); background: var(--bg); }
+    .search-wrap svg { position: absolute; left: 10px; color: rgba(255,255,255,0.4); pointer-events: none; }
+    .search-wrap input {
+      padding-left: 32px; width: 200px;
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.15);
+      color: #fff; font-size: 12.5px;
+      transition: width 0.2s, background 0.15s;
+    }
+    .search-wrap input::placeholder { color: rgba(255,255,255,0.4); }
+    .search-wrap input:focus { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.35); width: 240px; }
+
+    .btn-primary {
+      background: #fff; color: var(--navy-dark); border: none;
+      border-radius: 6px; padding: 7px 14px; font-size: 12.5px;
+      font-weight: 500; display: flex; align-items: center; gap: 6px;
+      transition: background 0.15s; white-space: nowrap;
+    }
+    .btn-primary:hover { background: #e8f0f8; }
+    .btn-ghost-dark {
+      background: transparent; border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px; padding: 6px 12px; font-size: 12px;
+      color: rgba(255,255,255,0.7); display: flex; align-items: center;
+      gap: 5px; transition: border-color 0.15s, background 0.15s; white-space: nowrap;
+    }
+    .btn-ghost-dark:hover { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.08); }
+    .btn-icon-dark {
+      background: transparent; border: none; padding: 6px;
+      display: flex; align-items: center; color: rgba(255,255,255,0.5);
+      border-radius: 5px; transition: color 0.15s, background 0.15s;
+    }
+    .btn-icon-dark:hover { color: #fff; background: rgba(255,255,255,0.1); }
 
     /* ── Layout ── */
-    .layout { display: flex; min-height: calc(100vh - 54px); }
+    .layout { display: flex; min-height: calc(100vh - 56px); }
 
     /* ── Sidebar ── */
-    .sidebar { width: 216px; background: var(--surface); border-right: 1px solid var(--border); padding: 20px 0 0; display: flex; flex-direction: column; flex-shrink: 0; position: sticky; top: 54px; height: calc(100vh - 54px); overflow-y: auto; }
-    .sidebar-label { font-size: 9.5px; font-weight: 500; letter-spacing: 1.2px; color: var(--text-3); padding: 0 18px 10px; text-transform: uppercase; }
-    .cat-btn { width: 100%; text-align: left; background: none; border: none; border-left: 2px solid transparent; padding: 8px 18px; font-size: 12.5px; font-weight: 400; color: var(--text-2); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.1s, color 0.1s; line-height: 1.4; }
+    .sidebar {
+      width: 220px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 22px 0 0;
+      display: flex; flex-direction: column; flex-shrink: 0;
+      position: sticky; top: 56px;
+      height: calc(100vh - 56px);
+      overflow-y: auto;
+    }
+    .sidebar-label {
+      font-size: 9px; font-weight: 500; letter-spacing: 1.4px;
+      color: var(--text-3); padding: 0 18px 10px; text-transform: uppercase;
+    }
+    .cat-btn {
+      width: 100%; text-align: left; background: none; border: none;
+      border-left: 2px solid transparent; padding: 8px 18px;
+      font-size: 12.5px; font-weight: 400; color: var(--text-2);
+      cursor: pointer; display: flex; justify-content: space-between;
+      align-items: center; transition: background 0.1s, color 0.1s; line-height: 1.4;
+    }
     .cat-btn:hover { background: var(--bg); color: var(--text); }
-    .cat-btn.active { border-left-color: var(--navy); color: var(--navy); font-weight: 500; background: var(--navy-light); }
-    .cat-count { font-size: 10px; color: var(--text-3); background: var(--bg); padding: 1px 6px; border-radius: 10px; min-width: 20px; text-align: center; }
+    .cat-btn.active {
+      border-left-color: var(--navy); color: var(--navy);
+      font-weight: 500; background: var(--navy-light);
+    }
+    .cat-count {
+      font-size: 10px; color: var(--text-3); background: var(--bg);
+      padding: 1px 7px; border-radius: 10px; min-width: 22px; text-align: center;
+    }
     .cat-btn.active .cat-count { background: #D0DFF0; color: var(--navy-mid); }
-    .sidebar-divider { height: 1px; background: var(--border); margin: 10px 0; }
-    .sidebar-action-btn { width: 100%; font-size: 11.5px; padding: 7px 18px; border-radius: 0; border: none; background: transparent; color: var(--text-2); cursor: pointer; display: flex; align-items: center; gap: 7px; transition: background 0.1s, color 0.1s; text-align: left; }
+
+    .sidebar-divider { height: 1px; background: var(--border); margin: 12px 0; }
+    .sidebar-action-btn {
+      width: 100%; font-size: 11.5px; padding: 7px 18px;
+      border: none; background: transparent; color: var(--text-2);
+      cursor: pointer; display: flex; align-items: center; gap: 7px;
+      transition: background 0.1s, color 0.1s; text-align: left;
+    }
     .sidebar-action-btn:hover { background: var(--bg); color: var(--text); }
-    .sidebar-footer { margin-top: auto; padding: 16px 18px 20px; border-top: 1px solid var(--border); }
-    .sidebar-stat { font-family: var(--serif); font-size: 26px; color: var(--navy); line-height: 1; font-weight: 600; }
+
+    .sidebar-footer {
+      margin-top: auto; padding: 16px 18px 22px;
+      border-top: 1px solid var(--border);
+    }
+    .sidebar-stat { font-family: var(--serif); font-size: 28px; color: var(--navy); line-height: 1; font-weight: 600; }
     .sidebar-stat-label { font-size: 11px; color: var(--text-3); margin-top: 3px; }
     .editor-badge { font-size: 10px; color: var(--navy-mid); margin-top: 8px; display: flex; align-items: center; gap: 4px; }
 
     /* ── Mobile pills ── */
-    .mobile-cat-bar { display: none; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; padding: 10px 16px; gap: 6px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .mobile-cat-bar {
+      display: none; background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto; padding: 10px 16px; gap: 6px;
+      scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    }
     .mobile-cat-bar::-webkit-scrollbar { display: none; }
-    .mobile-cat-pill { flex-shrink: 0; padding: 5px 13px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); font-size: 12px; color: var(--text-2); cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+    .mobile-cat-pill {
+      flex-shrink: 0; padding: 5px 13px; border-radius: 20px;
+      border: 1px solid var(--border); background: var(--surface);
+      font-size: 12px; color: var(--text-2); cursor: pointer;
+      white-space: nowrap; transition: all 0.15s;
+    }
     .mobile-cat-pill.active { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: 500; }
     .mobile-cat-pill:hover:not(.active) { border-color: var(--border-mid); background: var(--bg); }
 
     /* ── Main ── */
     .main { flex: 1; min-width: 0; }
 
-    .hub-intro { padding: 28px 32px 22px; border-bottom: 1px solid var(--border); background: var(--surface); }
-    .hub-intro-title { font-family: var(--serif); font-size: 19px; font-weight: 600; color: var(--navy); letter-spacing: -0.3px; margin-bottom: 7px; }
-    .hub-intro-desc { font-size: 13px; color: var(--text-2); line-height: 1.7; max-width: 580px; }
-    .hub-intro-meta { display: flex; align-items: center; gap: 18px; margin-top: 16px; flex-wrap: wrap; }
-    .hub-stat { display: flex; flex-direction: column; gap: 1px; }
-    .hub-stat-num { font-family: var(--serif); font-size: 21px; font-weight: 600; color: var(--navy); line-height: 1; }
-    .hub-stat-label { font-size: 10.5px; color: var(--text-3); }
-    .hub-stat-divider { width: 1px; height: 26px; background: var(--border); }
+    /* ── Hub hero ── */
+    .hub-hero {
+      background: var(--navy-dark);
+      padding: 36px 36px 30px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+      overflow: hidden;
+    }
+    .hub-hero::before {
+      content: "";
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(46,92,138,0.4) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hub-hero-eyebrow {
+      font-size: 10px; font-weight: 500; letter-spacing: 1.2px;
+      color: rgba(255,255,255,0.4); text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .hub-hero-title {
+      font-family: var(--serif);
+      font-size: 22px; font-weight: 600;
+      color: #ffffff; letter-spacing: -0.4px;
+      line-height: 1.3; margin-bottom: 10px;
+      max-width: 480px;
+    }
+    .hub-hero-desc {
+      font-size: 13px; color: rgba(255,255,255,0.55);
+      line-height: 1.7; max-width: 520px;
+    }
+    .hub-stats {
+      display: flex; align-items: center; gap: 20px;
+      margin-top: 22px; flex-wrap: wrap;
+    }
+    .hub-stat { display: flex; flex-direction: column; gap: 2px; }
+    .hub-stat-num {
+      font-family: var(--serif); font-size: 22px; font-weight: 600;
+      color: #ffffff; line-height: 1;
+    }
+    .hub-stat-label { font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 0.3px; }
+    .hub-stat-divider { width: 1px; height: 28px; background: rgba(255,255,255,0.12); }
 
-    .cat-header { padding: 24px 32px 20px; border-bottom: 1px solid var(--border); background: var(--surface); }
-    .cat-header-eyebrow { font-size: 10px; font-weight: 500; letter-spacing: 1px; color: var(--text-3); text-transform: uppercase; margin-bottom: 6px; }
-    .cat-header-title { font-family: var(--serif); font-size: 19px; font-weight: 600; color: var(--navy); letter-spacing: -0.3px; margin-bottom: 7px; }
+    /* ── Category header ── */
+    .cat-header {
+      padding: 26px 36px 22px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .cat-header-eyebrow {
+      font-size: 10px; font-weight: 500; letter-spacing: 1px;
+      color: var(--text-3); text-transform: uppercase; margin-bottom: 6px;
+    }
+    .cat-header-title {
+      font-family: var(--serif); font-size: 20px; font-weight: 600;
+      color: var(--navy); letter-spacing: -0.3px; margin-bottom: 8px;
+    }
     .cat-header-desc { font-size: 13px; color: var(--text-2); line-height: 1.7; max-width: 540px; }
     .cat-header-count { margin-top: 12px; font-size: 11px; color: var(--text-3); }
 
-    .content { padding: 20px 32px 40px; }
-    .filter-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 9px 14px; margin-bottom: 18px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    /* ── Content ── */
+    .content { padding: 22px 36px 60px; }
+
+    .filter-bar {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 9px 14px; margin-bottom: 20px;
+      display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+    }
     .filter-bar span { font-size: 11px; color: var(--text-3); }
     .filter-bar select { font-size: 11.5px; padding: 4px 8px; background: var(--bg); border-color: transparent; }
     .clear-btn { font-size: 11px; color: var(--red); background: none; border: none; cursor: pointer; margin-left: auto; }
     .results-count { font-size: 11.5px; color: var(--text-3); margin-bottom: 16px; }
 
-    /* ── Grid & Cards ── */
-    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; transition: border-color 0.15s, box-shadow 0.15s; }
-    .card:hover { border-color: var(--border-mid); box-shadow: 0 2px 14px rgba(27,58,92,0.06); }
-    .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 6px; }
+    /* ── Grid ── */
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 18px 20px;
+      display: flex; flex-direction: column;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+    }
+    .card:hover {
+      border-color: var(--border-mid);
+      box-shadow: 0 4px 20px rgba(27,58,92,0.08);
+      transform: translateY(-1px);
+    }
+    .card-top {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 12px; gap: 6px;
+    }
     .card-badges { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
-    .cat-badge { font-size: 9px; font-weight: 600; letter-spacing: 0.8px; padding: 3px 8px; border-radius: 3px; text-transform: uppercase; }
-    .type-badge { font-size: 9px; font-weight: 500; letter-spacing: 0.4px; padding: 3px 7px; border-radius: 3px; background: var(--bg); color: var(--text-3); border: 1px solid var(--border); text-transform: uppercase; }
+    .cat-badge {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.8px;
+      padding: 3px 8px; border-radius: 3px; text-transform: uppercase;
+    }
+    .type-badge {
+      font-size: 9px; font-weight: 400; letter-spacing: 0.3px;
+      padding: 3px 7px; border-radius: 3px;
+      background: var(--bg); color: var(--text-3);
+      border: 1px solid var(--border); text-transform: uppercase;
+    }
     .card-actions { opacity: 0; transition: opacity 0.15s; flex-shrink: 0; }
     .card:hover .card-actions { opacity: 1; }
-    .delete-btn { background: none; border: none; cursor: pointer; color: var(--text-3); padding: 3px; display: flex; border-radius: 4px; }
+    .delete-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-3); padding: 3px; display: flex; border-radius: 4px;
+    }
     .delete-btn:hover { color: var(--red); background: #FEF2F2; }
-    .card-title { font-family: var(--serif); font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.45; margin-bottom: 8px; display: flex; gap: 5px; align-items: flex-start; }
+
+    .card-title {
+      font-family: var(--serif); font-size: 14.5px; font-weight: 500;
+      color: var(--text); line-height: 1.45; margin-bottom: 9px;
+      display: flex; gap: 6px; align-items: flex-start;
+    }
     .card-title a { flex: 1; transition: color 0.15s; }
     .card-title a:hover { color: var(--navy); }
-    .card-link-icon { flex-shrink: 0; margin-top: 3px; color: var(--text-3); opacity: 0; transition: opacity 0.15s; }
+    .card-link-icon {
+      flex-shrink: 0; margin-top: 3px; color: var(--text-3);
+      opacity: 0; transition: opacity 0.15s;
+    }
     .card:hover .card-link-icon { opacity: 1; }
-    .card-desc { font-size: 12.5px; color: var(--text-2); line-height: 1.65; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .card-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 10px; margin-top: auto; }
+
+    .card-desc {
+      font-size: 12.5px; color: var(--text-2); line-height: 1.65;
+      margin-bottom: 14px;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+    .card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border); padding-top: 11px; margin-top: auto;
+    }
     .card-meta { display: flex; gap: 5px; font-size: 11px; color: var(--text-3); flex-wrap: wrap; align-items: center; }
     .card-meta-dot { color: var(--border-mid); }
-    .card-tag-count { font-size: 10px; color: var(--text-3); background: var(--bg); border: 1px solid var(--border); padding: 2px 7px; border-radius: 10px; white-space: nowrap; }
+    .card-tag-count {
+      font-size: 10px; color: var(--text-3); background: var(--bg);
+      border: 1px solid var(--border); padding: 2px 7px;
+      border-radius: 10px; white-space: nowrap;
+    }
 
     /* ── Empty ── */
-    .empty { padding: 70px 0; text-align: center; color: var(--text-3); }
+    .empty { padding: 80px 0; text-align: center; color: var(--text-3); }
     .empty-rule { width: 32px; height: 2px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
     .empty p { font-size: 13px; }
     .empty small { font-size: 11.5px; margin-top: 6px; display: block; }
 
     /* ── Error ── */
-    .error-banner { background: #FEF2F2; border-bottom: 1px solid #FECACA; padding: 8px 20px; font-size: 12px; color: var(--red); display: flex; align-items: center; gap: 8px; }
-    .error-dismiss { margin-left: auto; background: none; border: none; cursor: pointer; color: var(--red); font-size: 12px; font-family: var(--sans); }
+    .error-banner {
+      background: #FEF2F2; border-bottom: 1px solid #FECACA;
+      padding: 8px 28px; font-size: 12px; color: var(--red);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .error-dismiss { margin-left: auto; background: none; border: none; cursor: pointer; color: var(--red); font-size: 12px; }
 
     /* ── Modals ── */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(10,15,25,0.4); display: flex; align-items: flex-end; justify-content: center; z-index: 100; padding: 0; backdrop-filter: blur(2px); }
-    .modal { background: var(--surface); border-radius: 16px 16px 0 0; border: 1px solid var(--border); padding: 24px 24px 32px; width: 100%; max-width: 480px; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 -4px 30px rgba(10,15,25,0.12); }
-    .modal-title { font-family: var(--serif); font-size: 17px; font-weight: 600; color: var(--navy); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; letter-spacing: -0.2px; }
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(10,15,25,0.45);
+      display: flex; align-items: flex-end; justify-content: center;
+      z-index: 100; padding: 0; backdrop-filter: blur(3px);
+    }
+    .modal {
+      background: var(--surface); border-radius: 20px 20px 0 0;
+      border: 1px solid var(--border); padding: 26px 26px 36px;
+      width: 100%; max-width: 500px; position: relative;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 -4px 30px rgba(10,15,25,0.12);
+    }
+    .modal-title {
+      font-family: var(--serif); font-size: 18px; font-weight: 600;
+      color: var(--navy); margin-bottom: 8px;
+      display: flex; align-items: center; gap: 8px; letter-spacing: -0.2px;
+    }
     .modal p { font-size: 12.5px; color: var(--text-2); line-height: 1.65; margin-bottom: 16px; }
-    .modal-close { position: absolute; top: 14px; right: 14px; background: none; border: none; cursor: pointer; color: var(--text-3); display: flex; border-radius: 4px; padding: 3px; }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: none; border: none; cursor: pointer;
+      color: var(--text-3); display: flex; border-radius: 4px; padding: 3px;
+    }
     .modal-close:hover { color: var(--text); background: var(--bg); }
     .modal-hint { font-size: 10.5px; color: var(--text-3); margin-top: 12px; line-height: 1.6; }
     .modal-hint code { background: var(--bg); padding: 1px 5px; border-radius: 3px; font-size: 10px; border: 1px solid var(--border); }
     .form-field { margin-bottom: 13px; }
     .form-field label { display: block; font-size: 11px; font-weight: 500; color: var(--text-2); margin-bottom: 5px; }
     .form-field input, .form-field select, .form-field textarea { width: 100%; }
-    .form-success { font-size: 12px; color: var(--green-fg); background: var(--green-bg); padding: 9px 12px; border-radius: 6px; margin-bottom: 12px; }
     .form-error-msg { font-size: 12px; color: var(--red); background: #FEF2F2; padding: 9px 12px; border-radius: 6px; margin-bottom: 12px; border: 1px solid #FECACA; }
     .form-actions { display: flex; gap: 8px; margin-top: 4px; }
 
     /* ── Add view ── */
-    .add-view { max-width: 560px; margin: 0 auto; padding: 28px 24px 60px; }
-    .add-view-title { font-family: var(--serif); font-size: 21px; font-weight: 600; color: var(--navy); margin-bottom: 4px; letter-spacing: -0.3px; }
-    .add-view-sub { font-size: 12.5px; color: var(--text-2); margin-bottom: 24px; }
-    .back-btn { font-size: 12px; color: var(--text-3); background: none; border: none; cursor: pointer; margin-bottom: 22px; display: flex; align-items: center; gap: 5px; padding: 0; }
+    .add-view { max-width: 560px; margin: 0 auto; padding: 30px 36px 60px; }
+    .add-view-title { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--navy); margin-bottom: 5px; letter-spacing: -0.3px; }
+    .add-view-sub { font-size: 12.5px; color: var(--text-2); margin-bottom: 26px; }
+    .back-btn { font-size: 12px; color: var(--text-3); background: none; border: none; cursor: pointer; margin-bottom: 24px; display: flex; align-items: center; gap: 5px; padding: 0; }
     .back-btn:hover { color: var(--text); }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .suggest-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
     .suggest-row span { font-size: 11px; font-weight: 500; color: var(--text-2); }
-    .suggest-btn { font-size: 11px; padding: 4px 11px; border-radius: 5px; border: 1px solid #B8D4EC; background: #EEF4FB; color: var(--navy-mid); cursor: pointer; display: flex; align-items: center; gap: 5px; transition: background 0.15s; }
+    .suggest-btn { font-size: 11px; padding: 4px 11px; border-radius: 5px; border: 1px solid #B8D4EC; background: #EEF4FB; color: var(--navy-mid); cursor: pointer; display: flex; align-items: center; gap: 5px; }
     .suggest-btn:hover { background: #DCE9F5; }
     .suggest-btn:disabled { opacity: 0.5; cursor: wait; }
 
     /* ── AI Panel ── */
-    .ai-panel { position: fixed; bottom: 24px; right: 24px; z-index: 50; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
-    .ai-fab { width: 46px; height: 46px; border-radius: 50%; background: var(--navy); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 16px rgba(27,58,92,0.3); transition: background 0.15s, transform 0.15s; }
-    .ai-fab:hover { background: var(--navy-mid); transform: scale(1.04); }
-    .ai-window { width: 360px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 8px 32px rgba(10,15,25,0.12); display: flex; flex-direction: column; max-height: 520px; animation: slideUp 0.2s ease; }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .ai-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; }
-    .ai-header-name { font-family: var(--serif); font-size: 14px; font-weight: 600; color: var(--navy); display: flex; align-items: center; gap: 6px; }
-    .ai-header-sub { font-size: 10.5px; color: var(--text-3); margin-top: 2px; }
-    .ai-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-height: 220px; }
-    .ai-msg { max-width: 90%; font-size: 12px; line-height: 1.65; padding: 10px 13px; border-radius: 10px; }
-    .ai-msg.user { background: var(--navy); color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; }
-    .ai-msg.assistant { background: var(--bg); color: var(--text); align-self: flex-start; border-bottom-left-radius: 3px; border: 1px solid var(--border); }
-    .ai-msg.thinking { color: var(--text-3); font-style: italic; background: var(--bg); border: 1px solid var(--border); }
-    .ai-empty { font-size: 12px; color: var(--text-3); text-align: center; padding: 20px 10px; line-height: 1.6; }
-    .ai-input-row { padding: 11px 12px; border-top: 1px solid var(--border); display: flex; gap: 7px; }
-    .ai-input-row input { flex: 1; font-size: 12.5px; background: var(--bg); border-color: transparent; }
+    .ai-fab {
+      position: fixed; bottom: 24px; right: 24px; z-index: 50;
+      width: 50px; height: 50px; border-radius: 50%;
+      background: var(--navy-dark); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(27,58,92,0.35);
+      transition: background 0.15s, transform 0.15s;
+    }
+    .ai-fab:hover { background: var(--navy); transform: scale(1.06); }
+
+    .ai-backdrop {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,15,25,0.3); z-index: 59;
+    }
+    .ai-window {
+      position: fixed; bottom: 0; right: 24px;
+      width: 380px; z-index: 60;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px 16px 0 0;
+      box-shadow: 0 -4px 30px rgba(10,15,25,0.12);
+      display: flex; flex-direction: column;
+      max-height: 540px;
+      animation: slideUp 0.22s ease;
+    }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    .ai-header {
+      padding: 16px 18px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; justify-content: space-between;
+      background: var(--navy-dark); border-radius: 16px 16px 0 0;
+    }
+    .ai-header-name {
+      font-family: var(--serif); font-size: 14.5px; font-weight: 600;
+      color: #fff; display: flex; align-items: center; gap: 7px;
+    }
+    .ai-header-sub { font-size: 10.5px; color: rgba(255,255,255,0.45); margin-top: 3px; }
+    .ai-header-close { background: none; border: none; cursor: pointer; color: rgba(255,255,255,0.5); display: flex; padding: 2px; }
+    .ai-header-close:hover { color: #fff; }
+
+    .ai-messages {
+      flex: 1; overflow-y: auto; padding: 16px;
+      display: flex; flex-direction: column; gap: 12px;
+      min-height: 200px; background: var(--surface-2);
+    }
+    .ai-msg {
+      max-width: 90%; font-size: 12.5px; line-height: 1.65;
+      padding: 10px 14px; border-radius: 12px;
+    }
+    .ai-msg.user {
+      background: var(--navy); color: #fff;
+      align-self: flex-end; border-bottom-right-radius: 4px;
+    }
+    .ai-msg.assistant {
+      background: var(--surface); color: var(--text);
+      align-self: flex-start; border-bottom-left-radius: 4px;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .ai-msg.thinking { color: var(--text-3); font-style: italic; background: var(--surface); border: 1px solid var(--border); }
+    .ai-empty { font-size: 12px; color: var(--text-3); text-align: center; padding: 24px 16px; line-height: 1.7; }
+    .ai-empty strong { display: block; color: var(--text-2); font-weight: 500; margin-bottom: 4px; font-size: 13px; }
+
+    .ai-input-row {
+      padding: 12px 14px; border-top: 1px solid var(--border);
+      display: flex; gap: 8px; background: var(--surface);
+    }
+    .ai-input-row input {
+      flex: 1; font-size: 13px; background: var(--bg); border-color: transparent;
+    }
     .ai-input-row input:focus { background: var(--surface); border-color: var(--navy-mid); }
-    .ai-send { background: var(--navy); color: #fff; border: none; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; transition: background 0.15s; }
+    .ai-send {
+      background: var(--navy); color: #fff; border: none;
+      border-radius: 7px; padding: 7px 14px; font-size: 12px;
+      cursor: pointer; transition: background 0.15s; display: flex; align-items: center; gap: 5px;
+    }
     .ai-send:hover { background: var(--navy-mid); }
     .ai-send:disabled { opacity: 0.4; cursor: wait; }
-    .ai-key-notice { font-size: 12px; color: var(--text-3); padding: 20px 14px; text-align: center; line-height: 1.6; }
 
     @keyframes spin { to { transform: rotate(360deg); } }
     .spinning { animation: spin 1s linear infinite; }
 
     /* ── Mobile ── */
     @media (max-width: 680px) {
-      .ai-backdrop { display: block !important; position: fixed; inset: 0; background: rgba(10,15,25,0.3); z-index: 59; }
+      .ai-backdrop.open { display: block; }
       .header { padding: 0 14px; gap: 8px; }
       .logo-name { font-size: 14px; }
+      .logo-tag { display: none; }
       .search-wrap input { width: 130px; }
       .search-wrap input:focus { width: 150px; }
       .filter-label { display: none; }
@@ -209,15 +487,16 @@
       .mobile-cat-bar { display: flex; }
       .layout { display: block; }
       .main { width: 100%; }
-      .hub-intro { padding: 20px 16px 18px; }
-      .hub-intro-title { font-size: 17px; }
-      .hub-intro-desc { font-size: 12.5px; }
-      .hub-intro-meta { gap: 14px; margin-top: 14px; }
+      .hub-hero { padding: 22px 18px 20px; }
+      .hub-hero::before { display: none; }
+      .hub-hero-title { font-size: 18px; }
+      .hub-hero-desc { font-size: 12.5px; }
+      .hub-stats { gap: 16px; margin-top: 18px; }
       .hub-stat-num { font-size: 18px; }
-      .cat-header { padding: 18px 16px 16px; }
+      .cat-header { padding: 18px 18px 16px; }
       .cat-header-title { font-size: 17px; }
       .cat-header-desc { font-size: 12.5px; }
-      .content { padding: 14px 14px 40px; }
+      .content { padding: 14px 14px 50px; }
       .grid { grid-template-columns: 1fr; gap: 10px; }
       .card-actions { opacity: 1; }
       .card-link-icon { opacity: 1; }
@@ -229,29 +508,21 @@
       .clear-btn { margin-left: 0; }
       .add-view { padding: 20px 16px 50px; }
       .two-col { grid-template-columns: 1fr; }
-      .modal { border-radius: 16px 16px 0 0; padding: 20px 18px 36px; }
-      .ai-panel { bottom: 0; right: 0; left: 0; align-items: stretch; gap: 0; }
-      .ai-fab { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; }
+      .modal { border-radius: 20px 20px 0 0; padding: 22px 18px 36px; }
+      .ai-fab { bottom: 18px; right: 18px; width: 48px; height: 48px; }
       .ai-window {
-        position: fixed;
-        bottom: 0; left: 0; right: 0;
-        width: 100%;
-        max-height: 75vh;
+        right: 0; left: 0; width: 100%;
         border-radius: 20px 20px 0 0;
-        border-bottom: none;
-        box-shadow: 0 -4px 30px rgba(10,15,25,0.15);
-        z-index: 60;
+        max-height: 72vh;
       }
-      .ai-messages { min-height: 160px; }
-      .ai-msg { max-width: 95%; }
     }
 
     /* ── Tablet ── */
     @media (min-width: 681px) and (max-width: 960px) {
-      .sidebar { width: 180px; }
+      .sidebar { width: 185px; }
       .grid { grid-template-columns: 1fr; }
-      .hub-intro, .cat-header { padding-left: 24px; padding-right: 24px; }
-      .content { padding-left: 24px; padding-right: 24px; }
+      .hub-hero, .cat-header { padding-left: 26px; padding-right: 26px; }
+      .content { padding-left: 26px; padding-right: 26px; }
     }
   </style>
 </head>
@@ -284,14 +555,27 @@
       });
       if (!res.ok) { const e = await res.json().catch(()=>{}); throw new Error(e?.message || "GitHub commit failed."); }
     }
-    async function callClaude(apiKey, messages, system) {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+
+    async function askAI(messages, context) {
+      const res = await fetch(AI_PROXY_URL, {
         method: "POST",
-        headers: { "x-api-key": apiKey, "anthropic-version": "2023-06-01", "content-type": "application/json", "anthropic-dangerous-direct-browser-access": "true" },
-        body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1024, system, messages }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages, context }),
       });
-      if (!res.ok) { const e = await res.json().catch(()=>{}); throw new Error(e?.error?.message || "API error"); }
-      return (await res.json()).content[0].text;
+      if (!res.ok) { const e = await res.json().catch(()=>{}); throw new Error(e?.error || "AI unavailable"); }
+      return (await res.json()).reply;
+    }
+
+    function renderMarkdown(text) {
+      return text
+        .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+        .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
+        .replace(/\*(.+?)\*/g,"<em>$1</em>")
+        .replace(/^### (.+)$/gm,"<div style='font-family:var(--serif);font-size:13px;font-weight:600;color:var(--navy);margin:10px 0 4px;'>$1</div>")
+        .replace(/^## (.+)$/gm,"<div style='font-family:var(--serif);font-size:14px;font-weight:600;color:var(--navy);margin:12px 0 5px;'>$1</div>")
+        .replace(/^[-•] (.+)$/gm,"<div style='display:flex;gap:7px;margin:3px 0;'><span style='color:var(--navy-mid);flex-shrink:0;'>·</span><span>$1</span></div>")
+        .replace(/\n\n/g,"<div style='height:7px'></div>")
+        .replace(/\n/g,"<br/>");
     }
 
     const CATS = [
@@ -304,7 +588,6 @@
       { id: "payments",    label: "Payments / FinTech" },
       { id: "datasharing", label: "Data Sharing" },
     ];
-
     const CAT_COLORS = {
       blueprints:  { bg: "#E8EFF8", fg: "#1B3A5C" },
       dpi101:      { bg: "#EAF3DE", fg: "#2D5A1B" },
@@ -314,12 +597,10 @@
       payments:    { bg: "#FAEAE4", fg: "#8C2A1A" },
       datasharing: { bg: "#F0EEE8", fg: "#4A4438" },
     };
-
     const CAT_SHORT = {
       blueprints:"Framework", dpi101:"DPI 101", dpiresearch:"Research",
       sectoral:"Sectoral", digitalid:"Digital ID", payments:"Payments", datasharing:"Data Sharing",
     };
-
     const CAT_DESC = {
       blueprints:  "Overarching national and multilateral strategies for building digital government — whole-of-government blueprints, G20 declarations, and platform frameworks that shape how countries approach digital transformation.",
       dpi101:      "Starting-point readings on Digital Public Infrastructure — what it is, why it matters, and how to think about it. Ideal for onboarding colleagues or briefing new stakeholders.",
@@ -329,11 +610,10 @@
       payments:    "Digital payments infrastructure and FinTech DPI — instant payment systems, interoperability frameworks, open banking, and the policy layer enabling inclusive digital finance.",
       datasharing: "Data exchange architectures, consent frameworks, and data portability — from India's DEPA and Account Aggregator model to Estonia's X-Road and emerging data governance regimes.",
     };
-
     const RESOURCE_TYPES = [
-      "Article", "Research Paper", "Report", "Case Study",
-      "Practitioner Guide", "Legislation", "Strategy", "Explainer",
-      "Platform / Tool", "Dataset", "Declaration", "Working Paper", "Book",
+      "Article","Research Paper","Report","Case Study",
+      "Practitioner Guide","Legislation","Strategy","Explainer",
+      "Platform / Tool","Dataset","Declaration","Working Paper","Book",
     ];
 
     const Icon = {
@@ -348,11 +628,10 @@
       Key:     () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>,
       X:       () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
       Back:    () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>,
-      Sparkle: () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"/></svg>,
+      Sparkle: () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"/></svg>,
       Send:    () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
     };
 
-    // ── Token modal ──
     function TokenModal({ current, onSave, onClose }) {
       const [val, setVal] = useState(current);
       return (
@@ -363,8 +642,8 @@
             <p>Enter a GitHub Personal Access Token with <strong>Contents: Read &amp; Write</strong> on the <code style={{fontSize:11,background:"#f0ede6",padding:"1px 5px",borderRadius:3}}>{GITHUB_REPO}</code> repo. Stored only in your browser.</p>
             <input type="password" placeholder="github_pat_..." value={val} onChange={e=>setVal(e.target.value)} onKeyDown={e=>e.key==="Enter"&&onSave(val.trim())} style={{width:"100%",marginBottom:14,fontFamily:"monospace",fontSize:12}} />
             <div className="form-actions">
-              <button className="btn-primary" onClick={()=>onSave(val.trim())}>Save token</button>
-              {current && <button onClick={()=>onSave("")} style={{fontSize:12,color:"#B83232",background:"none",border:"none",cursor:"pointer",fontFamily:"var(--sans)"}}>Remove</button>}
+              <button className="btn-primary" style={{background:"var(--navy)",color:"#fff"}} onClick={()=>onSave(val.trim())}>Save token</button>
+              {current && <button onClick={()=>onSave("")} style={{fontSize:12,color:"#B83232",background:"none",border:"none",cursor:"pointer"}}>Remove</button>}
             </div>
             <p className="modal-hint">GitHub → Settings → Developer settings → Fine-grained tokens. Set Contents → Read and Write.</p>
           </div>
@@ -372,42 +651,7 @@
       );
     }
 
-    // ── API key modal ──
-    function ApiKeyModal({ current, onSave, onClose }) {
-      const [val, setVal] = useState(current);
-      return (
-        <div className="modal-overlay" onClick={onClose}>
-          <div className="modal" onClick={e=>e.stopPropagation()}>
-            <button className="modal-close" onClick={onClose}><Icon.X /></button>
-            <div className="modal-title"><Icon.Sparkle /> Enable AI features</div>
-            <p>Enter your Anthropic API key to ask questions about the library and auto-suggest categories and tags when adding resources. Stored only in your browser.</p>
-            <input type="password" placeholder="sk-ant-..." value={val} onChange={e=>setVal(e.target.value)} onKeyDown={e=>e.key==="Enter"&&onSave(val.trim())} style={{width:"100%",marginBottom:14,fontFamily:"monospace",fontSize:12}} />
-            <div className="form-actions">
-              <button className="btn-primary" onClick={()=>onSave(val.trim())}>Save key</button>
-              {current && <button onClick={()=>onSave("")} style={{fontSize:12,color:"#B83232",background:"none",border:"none",cursor:"pointer",fontFamily:"var(--sans)"}}>Remove</button>}
-            </div>
-            <p className="modal-hint">Get one at console.anthropic.com — pay-as-you-go, fractions of a cent per query.</p>
-          </div>
-        </div>
-      );
-    }
-
-    // ── Simple markdown renderer ──
-    function renderMarkdown(text) {
-      return text
-        .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
-        .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
-        .replace(/\*(.+?)\*/g,"<em>$1</em>")
-        .replace(/^### (.+)$/gm,"<h4 style='font-family:var(--serif);font-size:13px;font-weight:600;color:var(--navy);margin:10px 0 4px;'>$1</h4>")
-        .replace(/^## (.+)$/gm,"<h3 style='font-family:var(--serif);font-size:14px;font-weight:600;color:var(--navy);margin:12px 0 5px;'>$1</h3>")
-        .replace(/^# (.+)$/gm,"<h2 style='font-family:var(--serif);font-size:15px;font-weight:600;color:var(--navy);margin:12px 0 6px;'>$1</h2>")
-        .replace(/^[-•] (.+)$/gm,"<div style='display:flex;gap:7px;margin:3px 0;'><span style='flex-shrink:0;color:var(--navy-mid);margin-top:1px;'>·</span><span>$1</span></div>")
-        .replace(/\n\n/g,"<div style='height:8px'></div>")
-        .replace(/\n/g,"<br/>");
-    }
-
-    // ── AI Panel ──
-    function AiPanel({ resources, apiKey, onNeedKey }) {
+    function AiPanel({ resources }) {
       const [open, setOpen] = useState(false);
       const [messages, setMessages] = useState([]);
       const [input, setInput] = useState("");
@@ -417,72 +661,64 @@
 
       async function send() {
         if (!input.trim()||thinking) return;
-        if (!apiKey) { onNeedKey(); return; }
         const userMsg = input.trim(); setInput("");
         const newMsgs = [...messages, {role:"user",content:userMsg}];
         setMessages(newMsgs); setThinking(true);
         try {
           const context = resources.map(r=>`[${r.title}] (${r.category}${r.resourceType?", "+r.resourceType:""}) — ${r.description||""} — ${r.url}`).join("\n");
-          const system = `You are a helpful assistant for the DPI Knowledge Hub, a curated resource library on Digital Public Infrastructure. Answer questions using the resources below as your primary reference. Be concise and cite resource titles when relevant.\n\nRESOURCES:\n${context}`;
-          const reply = await callClaude(apiKey, newMsgs, system);
+          const reply = await askAI(newMsgs, context);
           setMessages([...newMsgs, {role:"assistant",content:reply}]);
-        } catch(e) { setMessages([...newMsgs, {role:"assistant",content:`Error: ${e.message}`}]); }
+        } catch(e) {
+          setMessages([...newMsgs, {role:"assistant",content:`Sorry, the AI assistant isn't available right now. (${e.message})`}]);
+        }
         setThinking(false);
       }
 
       return (
-        <div className="ai-panel">
+        <>
+          {open && <div className="ai-backdrop open" onClick={()=>setOpen(false)} />}
           {open && (
-            <>
-              <div
-                onClick={()=>setOpen(false)}
-                style={{display:"none"}}
-                className="ai-backdrop"
-              />
-              <div className="ai-window">
+            <div className="ai-window">
               <div className="ai-header">
                 <div>
-                  <div className="ai-header-name"><Icon.Sparkle /> Ask the library</div>
-                  <div className="ai-header-sub">Claude · {resources.length} resources indexed</div>
+                  <div className="ai-header-name">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"/></svg>
+                    Ask the library
+                  </div>
+                  <div className="ai-header-sub">Powered by Claude · {resources.length} resources</div>
                 </div>
-                <button className="btn-icon" onClick={()=>setOpen(false)}><Icon.X /></button>
+                <button className="ai-header-close" onClick={()=>setOpen(false)}><Icon.X /></button>
               </div>
-              {!apiKey ? (
-                <div className="ai-key-notice">
-                  Add your Anthropic API key to use AI features.<br/>
-                  <button onClick={onNeedKey} style={{marginTop:10,fontSize:11.5,padding:"5px 14px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",cursor:"pointer",fontFamily:"var(--sans)",color:"var(--navy)"}}>Add API key</button>
-                </div>
-              ) : (
-                <>
-                  <div className="ai-messages">
-                    {messages.length===0 && <div className="ai-empty">Ask anything — which resources cover payments, what does the World Bank say about digital ID, which papers are from India...</div>}
-                    {messages.map((m,i)=>(
-                      <div key={i} className={`ai-msg ${m.role}`}>
-                        {m.role==="assistant"
-                          ? <span dangerouslySetInnerHTML={{__html: renderMarkdown(m.content)}} />
-                          : m.content}
-                      </div>
-                    ))}
-                    {thinking && <div className="ai-msg thinking">Thinking...</div>}
-                    <div ref={bottomRef} />
+              <div className="ai-messages">
+                {messages.length===0 && (
+                  <div className="ai-empty">
+                    <strong>Ask anything about DPI</strong>
+                    Which resources cover digital payments? What do the G20 frameworks say about data sharing? Which papers are from Southeast Asia?
                   </div>
-                  <div className="ai-input-row">
-                    <input placeholder="Ask a question..." value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} />
-                    <button className="ai-send" onClick={send} disabled={thinking||!input.trim()}><Icon.Send /></button>
+                )}
+                {messages.map((m,i)=>(
+                  <div key={i} className={`ai-msg ${m.role}`}>
+                    {m.role==="assistant"
+                      ? <span dangerouslySetInnerHTML={{__html:renderMarkdown(m.content)}} />
+                      : m.content}
                   </div>
-                </>
-              )}
+                ))}
+                {thinking && <div className="ai-msg thinking">Thinking...</div>}
+                <div ref={bottomRef} />
+              </div>
+              <div className="ai-input-row">
+                <input placeholder="Ask a question..." value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} />
+                <button className="ai-send" onClick={send} disabled={thinking||!input.trim()}><Icon.Send /> Send</button>
+              </div>
             </div>
-            </>
           )}
           <button className="ai-fab" onClick={()=>setOpen(v=>!v)} title="Ask the library">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"/></svg>
           </button>
-        </div>
+        </>
       );
     }
 
-    // ── Card ──
     function Card({ r, isEditor, onDelete }) {
       const col = CAT_COLORS[r.category] || { bg:"#F0EEE8", fg:"#4A4438" };
       const label = CAT_SHORT[r.category] || r.category;
@@ -495,7 +731,7 @@
               {r.resourceType && <span className="type-badge">{r.resourceType}</span>}
             </div>
             <div className="card-actions">
-              {isEditor && <button className="delete-btn" onClick={onDelete} title="Remove"><Icon.Trash /></button>}
+              {isEditor && <button className="delete-btn" onClick={onDelete}><Icon.Trash /></button>}
             </div>
           </div>
           <div className="card-title">
@@ -515,30 +751,11 @@
       );
     }
 
-    // ── Add view ──
-    function AddView({ onBack, onAdd, saving, apiKey, onNeedKey }) {
+    function AddView({ onBack, onAdd, saving }) {
       const empty = { title:"", url:"", description:"", category:"blueprints", resourceType:"", tags:"", country:"", datePublished:"", sourceOrg:"" };
       const [form, setForm] = useState(empty);
       const [err, setErr] = useState("");
-      const [suggesting, setSuggesting] = useState(false);
       const set = (k,v) => { setForm(f=>({...f,[k]:v})); setErr(""); };
-
-      async function autoSuggest() {
-        if (!form.title&&!form.url) { setErr("Enter a title or URL first."); return; }
-        if (!apiKey) { onNeedKey(); return; }
-        setSuggesting(true);
-        try {
-          const prompt = `Given this resource:\nTitle: ${form.title}\nURL: ${form.url}\nDescription: ${form.description}\n\nSuggest:\n1. The best category from: blueprints, dpi101, dpiresearch, sectoral, digitalid, payments, datasharing\n2. The best resource type from: Article, Research Paper, Report, Case Study, Practitioner Guide, Legislation, Strategy, Explainer, Platform / Tool, Dataset, Declaration, Working Paper, Book\n3. 3-5 relevant tags as comma-separated list\n\nReply in this exact format:\nCATEGORY: <category>\nTYPE: <type>\nTAGS: <tag1>, <tag2>, <tag3>`;
-          const reply = await callClaude(apiKey, [{role:"user",content:prompt}], "You categorise digital public infrastructure resources.");
-          const catMatch  = reply.match(/CATEGORY:\s*(\w+)/i);
-          const typeMatch = reply.match(/TYPE:\s*(.+)/i);
-          const tagMatch  = reply.match(/TAGS:\s*(.+)/i);
-          if (catMatch)  set("category", catMatch[1].toLowerCase().trim());
-          if (typeMatch) set("resourceType", typeMatch[1].trim());
-          if (tagMatch)  set("tags", tagMatch[1].trim());
-        } catch(e) { setErr("Auto-suggest failed: "+e.message); }
-        setSuggesting(false);
-      }
 
       function submit() {
         if (!form.title.trim()) { setErr("Title is required."); return; }
@@ -554,10 +771,6 @@
           <div className="form-field"><label>Title *</label><input value={form.title} onChange={e=>set("title",e.target.value)} placeholder="e.g. India Stack: A Digital Infrastructure Story" /></div>
           <div className="form-field"><label>URL *</label><input value={form.url} onChange={e=>set("url",e.target.value)} placeholder="https://..." /></div>
           <div className="form-field"><label>Description</label><textarea rows={3} value={form.description} onChange={e=>set("description",e.target.value)} placeholder="Brief summary — 2-3 sentences." /></div>
-          <div className="suggest-row">
-            <span>Category, type &amp; tags</span>
-            <button className="suggest-btn" onClick={autoSuggest} disabled={suggesting}><Icon.Sparkle /> {suggesting?"Suggesting...":"Auto-suggest with AI"}</button>
-          </div>
           <div className="two-col" style={{marginBottom:13}}>
             <div className="form-field" style={{marginBottom:0}}><label>Category *</label>
               <select value={form.category} onChange={e=>set("category",e.target.value)} style={{width:"100%"}}>
@@ -587,30 +800,29 @@
           <div className="form-field"><label>Tags (comma-separated)</label><input value={form.tags} onChange={e=>set("tags",e.target.value)} placeholder="e.g. digital ID, biometrics, open source" /></div>
           {err && <div className="form-error-msg">{err}</div>}
           <div className="form-actions">
-            <button className="btn-primary" onClick={submit} disabled={saving} style={{opacity:saving?0.6:1,flex:1,justifyContent:"center"}}>{saving?"Saving...":"Save resource"}</button>
-            <button className="btn-ghost" onClick={onBack}>Cancel</button>
+            <button onClick={submit} disabled={saving} style={{flex:1,justifyContent:"center",background:"var(--navy)",color:"#fff",border:"none",borderRadius:"6px",padding:"9px 16px",fontSize:"13px",fontWeight:500,cursor:saving?"wait":"pointer",opacity:saving?0.6:1,display:"flex",alignItems:"center",gap:6,fontFamily:"var(--sans)"}}>
+              {saving?"Saving...":"Save resource"}
+            </button>
+            <button onClick={onBack} style={{padding:"9px 16px",fontSize:"13px",background:"transparent",border:"1px solid var(--border)",borderRadius:"6px",color:"var(--text-2)"}}>Cancel</button>
           </div>
         </div>
       );
     }
 
-    // ── Main App ──
     function App() {
-      const [resources, setResources]   = useState([]);
-      const [loading, setLoading]       = useState(true);
-      const [syncing, setSyncing]       = useState(false);
-      const [error, setError]           = useState("");
-      const [view, setView]             = useState("browse");
-      const [activeCat, setActiveCat]   = useState("all");
-      const [search, setSearch]         = useState("");
+      const [resources, setResources] = useState([]);
+      const [loading, setLoading]     = useState(true);
+      const [syncing, setSyncing]     = useState(false);
+      const [error, setError]         = useState("");
+      const [view, setView]           = useState("browse");
+      const [activeCat, setActiveCat] = useState("all");
+      const [search, setSearch]       = useState("");
       const [showFilters, setShowFilters] = useState(false);
-      const [fCountry, setFCountry]     = useState("");
-      const [fSource, setFSource]       = useState("");
-      const [fType, setFType]           = useState("");
-      const [token, setToken]           = useState(()=>localStorage.getItem("dig_pat")||"");
-      const [apiKey, setApiKey]         = useState(()=>localStorage.getItem("dig_apikey")||"");
+      const [fCountry, setFCountry]   = useState("");
+      const [fSource, setFSource]     = useState("");
+      const [fType, setFType]         = useState("");
+      const [token, setToken]         = useState(()=>localStorage.getItem("dig_pat")||"");
       const [showTokenModal, setShowTokenModal] = useState(false);
-      const [showApiModal, setShowApiModal]     = useState(false);
       const isEditor = Boolean(token);
 
       const load = useCallback(async () => {
@@ -622,7 +834,6 @@
       useEffect(()=>{ load(); },[load]);
 
       function saveToken(t) { setToken(t); t?localStorage.setItem("dig_pat",t):localStorage.removeItem("dig_pat"); setShowTokenModal(false); }
-      function saveApiKey(k) { setApiKey(k); k?localStorage.setItem("dig_apikey",k):localStorage.removeItem("dig_apikey"); setShowApiModal(false); }
 
       async function handleAdd(resource) {
         setSyncing(true); setError("");
@@ -662,7 +873,7 @@
       const allTypes     = [...new Set(resources.map(r=>r.resourceType).filter(Boolean))].sort();
       const activeFilters = [fCountry,fSource,fType].filter(Boolean).length;
 
-      if (view==="add") return <AddView onBack={()=>setView("browse")} onAdd={handleAdd} saving={syncing} apiKey={apiKey} onNeedKey={()=>setShowApiModal(true)} />;
+      if (view==="add") return <AddView onBack={()=>setView("browse")} onAdd={handleAdd} saving={syncing} />;
 
       const catInfo = CATS.find(c=>c.id===activeCat);
 
@@ -671,25 +882,29 @@
           <header className="header">
             <div className="logo">
               <div className="logo-name">DPI Knowledge Hub</div>
-              <div className="logo-rule" />
+              <div className="logo-tag">ADB · DIG</div>
             </div>
             <div className="spacer" />
             <div className="search-wrap">
               <Icon.Search />
               <input placeholder="Search..." value={search} onChange={e=>setSearch(e.target.value)} />
             </div>
-            <button className="btn-ghost" onClick={()=>setShowFilters(v=>!v)} style={{position:"relative",background:showFilters?"var(--bg)":"transparent"}}>
+            <button className="btn-ghost-dark" onClick={()=>setShowFilters(v=>!v)} style={{position:"relative"}}>
               <Icon.Filter />
               <span className="filter-label"> Filters</span>
-              {activeFilters>0&&<span style={{position:"absolute",top:3,right:3,width:5,height:5,borderRadius:"50%",background:"var(--navy)"}}/>}
+              {activeFilters>0&&<span style={{position:"absolute",top:3,right:3,width:5,height:5,borderRadius:"50%",background:"#C4882A"}}/>}
             </button>
-            <button className="btn-icon" onClick={load} title="Refresh">
+            <button className="btn-icon-dark" onClick={load} title="Refresh">
               <span className={(loading||syncing)?"spinning":""}><Icon.Refresh /></span>
             </button>
-            <button className="btn-icon" onClick={()=>setShowTokenModal(true)} style={{color:isEditor?"var(--navy)":"var(--text-3)"}} title={isEditor?"Editor mode on":"Unlock editing"}>
+            <button className="btn-icon-dark" onClick={()=>setShowTokenModal(true)} style={{color:isEditor?"#7BB8E8":"rgba(255,255,255,0.4)"}} title={isEditor?"Editor mode on":"Unlock editing"}>
               {isEditor?<Icon.Unlock />:<Icon.Lock />}
             </button>
-            {isEditor && <button className="btn-primary" onClick={()=>setView("add")}><Icon.Plus /><span className="filter-label"> Add</span></button>}
+            {isEditor && (
+              <button className="btn-primary" onClick={()=>setView("add")}>
+                <Icon.Plus /><span className="filter-label"> Add</span>
+              </button>
+            )}
           </header>
 
           {error && <div className="error-banner">⚠ {error}<button className="error-dismiss" onClick={()=>setError("")}>Dismiss</button></div>}
@@ -711,10 +926,6 @@
                   <span className="cat-count">{counts[cat.id]}</span>
                 </button>
               ))}
-              <div className="sidebar-divider" />
-              <button className="sidebar-action-btn" onClick={()=>setShowApiModal(true)} style={{color:apiKey?"var(--navy)":"var(--text-2)"}}>
-                <Icon.Sparkle /> {apiKey?"AI enabled":"Enable AI"}
-              </button>
               <div className="sidebar-footer">
                 <div className="sidebar-stat">{resources.length}</div>
                 <div className="sidebar-stat-label">resources indexed</div>
@@ -724,17 +935,18 @@
 
             <main className="main">
               {activeCat==="all" && (
-                <div className="hub-intro">
-                  <div className="hub-intro-title">A curated library on Digital Public Infrastructure</div>
-                  <p className="hub-intro-desc">A living reference for practitioners working on DPI. Browse frameworks, foundational readings, research, and sector-specific resources — or search by topic, country, or organisation.</p>
-                  <div className="hub-intro-meta">
+                <div className="hub-hero">
+                  <div className="hub-hero-eyebrow">DPI Knowledge Hub</div>
+                  <div className="hub-hero-title">A curated library on Digital Public Infrastructure</div>
+                  <p className="hub-hero-desc">A living reference for practitioners working on DPI. Browse frameworks, foundational readings, research, and sector-specific resources — or search by topic, country, or organisation.</p>
+                  <div className="hub-stats">
                     <div className="hub-stat"><div className="hub-stat-num">{resources.length}</div><div className="hub-stat-label">Resources</div></div>
                     <div className="hub-stat-divider" />
                     <div className="hub-stat"><div className="hub-stat-num">{CATS.length-1}</div><div className="hub-stat-label">Categories</div></div>
                     <div className="hub-stat-divider" />
                     <div className="hub-stat"><div className="hub-stat-num">{[...new Set(resources.map(r=>r.country).filter(Boolean))].length}</div><div className="hub-stat-label">Countries</div></div>
                     <div className="hub-stat-divider" />
-                    <div className="hub-stat"><div className="hub-stat-num">{[...new Set(resources.map(r=>r.sourceOrg).filter(Boolean))].length}</div><div className="hub-stat-label">Orgs</div></div>
+                    <div className="hub-stat"><div className="hub-stat-num">{[...new Set(resources.map(r=>r.sourceOrg).filter(Boolean))].length}</div><div className="hub-stat-label">Organisations</div></div>
                   </div>
                 </div>
               )}
@@ -783,10 +995,8 @@
             </main>
           </div>
 
-          <AiPanel resources={resources} apiKey={apiKey} onNeedKey={()=>setShowApiModal(true)} />
-
+          <AiPanel resources={resources} />
           {showTokenModal && <TokenModal current={token} onSave={saveToken} onClose={()=>setShowTokenModal(false)} />}
-          {showApiModal   && <ApiKeyModal current={apiKey} onSave={saveApiKey} onClose={()=>setShowApiModal(false)} />}
         </>
       );
     }
