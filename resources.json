@@ -1,5 +1,23 @@
 [
   {
+    "title": "User-Centric Credentialing and Personal Data Sharing",
+    "url": "https://3828746278-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FTePkW42o2r4FFsn8gMpK%2Fuploads%2FMn65icGVQe9FkIr90W7U%2FVision%20Paper_User-Centric%20Credentialing%20and%20Personal%20Data%20Sharing.pdf?alt=media&token=7210aab4-4a53-44db-8151-b13c78877bd3",
+    "description": "It explores how verifiable credentials can make trusted data universally\naccessible, giving individuals control and self-custody over their personal data and digital assets while unlocking economic opportunities. It serves as a simple primer for countries seeking to improve citizens’ lives through secure and scalable data-sharing models. It also serves as a universal architecture approach for the industry to implement\ndata credentialing to drive innovation and efficiency across various sectors.",
+    "category": "datasharing",
+    "resourceType": "Report",
+    "tags": [
+      "data sharing",
+      "DPI",
+      "Centre for DPI",
+      "VC"
+    ],
+    "country": "Global",
+    "datePublished": "2025",
+    "sourceOrg": "CDPI",
+    "id": "mne7sc6r",
+    "dateAdded": "2026-03-31"
+  },
+  {
     "title": "What do VCs cost — and save?",
     "url": "https://vc.cdpi.dev/",
     "description": "Model for a comprehensive guide from on verifiable credentials.The\nwebsite shows KYC / Financial Services cost as per countries. \n\n*Actual numbers may vary.",
