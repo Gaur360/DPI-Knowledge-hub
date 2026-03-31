@@ -1,5 +1,22 @@
 [
   {
+    "title": "Pricing in fast payments: a practical and theoretical overview",
+    "url": "https://www.bis.org/publ/work1295.htm",
+    "description": "Fast Payment Systems (FPS) are the engine behind modern financial digitalization, offering 24/7 immediate fund availability. However, their rapid adoption raises a critical economic challenge: How should they be priced to ensure sustainability without stifling growth?\n\nThis paper provides a comprehensive global analysis of FPS pricing structures.",
+    "category": "payments",
+    "resourceType": "Research Paper",
+    "tags": [
+      "Fast payment system",
+      "pricing DPI",
+      "Sustainability"
+    ],
+    "country": "Global",
+    "datePublished": "2025",
+    "sourceOrg": "BIS",
+    "id": "mne7di4o",
+    "dateAdded": "2026-03-31"
+  },
+  {
     "title": "Singpass - technical documentation",
     "url": "https://docs.developer.singpass.gov.sg/docs/introduction/overview-of-singpass",
     "description": "Singpass is Singapore's national digital identity authentication provider using the OpenID Connect 1.0 protocol. It stores users' identity information and authenticates them for transactions with government agencies and private organizations online",
