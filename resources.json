@@ -1,20 +1,18 @@
 [
   {
-    "title": "User-Centric Credentialing and Personal Data Sharing",
-    "url": "https://3828746278-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FTePkW42o2r4FFsn8gMpK%2Fuploads%2FMn65icGVQe9FkIr90W7U%2FVision%20Paper_User-Centric%20Credentialing%20and%20Personal%20Data%20Sharing.pdf?alt=media&token=7210aab4-4a53-44db-8151-b13c78877bd3",
-    "description": "It explores how verifiable credentials can make trusted data universally\naccessible, giving individuals control and self-custody over their personal data and digital assets while unlocking economic opportunities. It serves as a simple primer for countries seeking to improve citizens’ lives through secure and scalable data-sharing models. It also serves as a universal architecture approach for the industry to implement\ndata credentialing to drive innovation and efficiency across various sectors.",
-    "category": "datasharing",
-    "resourceType": "Report",
+    "title": "Enabling Trusted, Inclusive Fast Payments through Digital ID",
+    "url": "https://fastpayments.worldbank.org/sites/default/files/2026-02/ID%20Meets%20Instant%20-%20Enabling%20Trusted%20Inclusive%20Fast%20Payments%20through%20Digital%20ID%20-%20Final_0.pdf",
+    "description": "A technical note exploring how digital identity can be embedded into fast payment systems beyond just onboarding. The paper is aimed at policymakers and regulators looking to advance Digital ID–FPS integration.",
+    "category": "payments",
+    "resourceType": "Research Paper",
     "tags": [
-      "data sharing",
-      "DPI",
-      "Centre for DPI",
-      "VC"
+      "fast payment system",
+      "DPI"
     ],
     "country": "Global",
-    "datePublished": "2025",
-    "sourceOrg": "CDPI",
-    "id": "mne7sc6r",
+    "datePublished": "2026",
+    "sourceOrg": "World Bank",
+    "id": "mne81evk",
     "dateAdded": "2026-03-31"
   },
   {
