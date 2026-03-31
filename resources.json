@@ -1,5 +1,22 @@
 [
   {
+    "title": "What do VCs cost — and save?",
+    "url": "https://vc.cdpi.dev/",
+    "description": "Economics model for KYC / Financial Services. The\nwebsite shows KYC / Financial Services cost as per countries. \n\n*Actual numbers may vary.",
+    "category": "datasharing",
+    "resourceType": "Practitioner Guide",
+    "tags": [
+      "data sharing",
+      "CDPI",
+      "verifiable credentials"
+    ],
+    "country": "Global",
+    "datePublished": "2026",
+    "sourceOrg": "CDPI",
+    "id": "mne7k3t5",
+    "dateAdded": "2026-03-31"
+  },
+  {
     "title": "Pricing in fast payments: a practical and theoretical overview",
     "url": "https://www.bis.org/publ/work1295.htm",
     "description": "Fast Payment Systems (FPS) are the engine behind modern financial digitalization, offering 24/7 immediate fund availability. However, their rapid adoption raises a critical economic challenge: How should they be priced to ensure sustainability without stifling growth?\n\nThis paper provides a comprehensive global analysis of FPS pricing structures.",
