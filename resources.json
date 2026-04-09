@@ -1,5 +1,20 @@
 [
   {
+    "title": "Guide to developing a National Cybersecurity Strategy",
+    "url": "https://ncsguide.org/",
+    "description": ". The objective of this effort is to support national leaders and policymakers in the development of defensive and proactive responses to cybersecurity risks, in the form of a National Cybersecurity Strategy (NCS), and in thinking strategically about cybersecurity, cyber preparedness, response, and resilience, while building confidence and security in the use of digital technologies.",
+    "category": "blueprints",
+    "resourceType": "Strategy",
+    "tags": [
+      "Cybersecurity"
+    ],
+    "country": "Global",
+    "datePublished": "2025",
+    "sourceOrg": "Multiple",
+    "id": "mnrhuezm",
+    "dateAdded": "2026-04-09"
+  },
+  {
     "title": "India Energy Stack",
     "url": "https://fsrglobal.org/wp-content/uploads/2025/06/IES-Concept-Brief.pdf",
     "description": "The India Energy Stack (IES) is an initiative announced by the Ministry of Power in June 2025 to create a unified, secure, and interoperable Digital Public Infrastructure (DPI) for the nation's energy sector. \n\nThe IES aims to transition the power sector from fragmented, legacy systems to a digital ecosystem that supports rapid renewable energy growth, electric vehicles, and consumer-centric energy markets",
